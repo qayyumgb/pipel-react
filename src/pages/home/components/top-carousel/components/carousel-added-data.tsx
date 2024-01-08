@@ -1,9 +1,9 @@
 import { Button, Checkbox, FormControlLabel, Grid } from '@mui/material';
 import React, { useState, useEffect, useCallback } from 'react';
-import styles from "./index.module.scss";
-import { HeroCard } from '../../../interfaces/heroCard';
-import { useUpdateInnerActiveMutation } from '../../../redux/slices/home';
-import emptyState from '../../../assets/images/emptyState.svg';
+import styles from "../top-carousel.module.scss";
+import { HeroCard } from '../../../../../interfaces/heroCard';
+import { useUpdateInnerActiveMutation } from '../../../../../redux/slices/home';
+import emptyState from '../../../../../assets/images/emptyState.svg';
 import { Link as RouterLink } from 'react-router-dom'
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { stringify } from 'json5';

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, Container, FormControlLabel, Grid } from '@mui/material';
 // import { useHomeCarouselDataQuery } from '../../../redux/slices/home';
-import styles from './index.module.scss';
-import ModalWrapper from '../../../common/modal';
-import AddCarousalData from './addCarousalForm';
-import CarousalAdded from './carousalAddedData';
-import { HeroCard } from '../../../interfaces/heroCard';
-import { useUploadSomeDataMutation } from '../../../redux/slices/home';
+import styles from './top-carousel.module.scss';
+import ModalWrapper from '../../../../common/modal';
+import AddCarousalData from './components/add-carousel-form';
+import CarousalAdded from './components/carousel-added-data';
+import { HeroCard } from '../../../../interfaces/heroCard';
+import { useUploadSomeDataMutation } from '../../../../redux/slices/home';
 
 
 // -----------------------------------------------------------------------------------------------------------------------

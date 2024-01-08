@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { Button, Checkbox, FormControlLabel, Grid, TextField, styled } from '@mui/material';
 
 
-import jsonData from '../../../constants/topCarousal.json';
+import jsonData from '../../../../../constants/topCarousal.json';
 
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 
-import { useUploadSomeDataMutation } from '../../../redux/slices/home';
-import styles from "./index.module.scss";
+import { useUploadSomeDataMutation } from '../../../../../redux/slices/home';
+import styles from "../top-carousel.module.scss";
 
 
 
@@ -19,7 +19,7 @@ import styles from "./index.module.scss";
 // -----------------------------------------------------------------------------------------------------------------------
 
 
-const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddData: (data: any) => void }) => {
+const AddCarouselForm = ({ onClose, onAddData }: { onClose: () => void; onAddData: (data: any) => void }) => {
     const initialFormData = {
         title: '',
         description: '',
@@ -224,4 +224,4 @@ function generateImageUrlOrPath(file: File): string | undefined {
     }
 }
 
-export default AddCarousalForm;
+export default AddCarouselForm;

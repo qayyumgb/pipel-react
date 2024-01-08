@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import jsonData from '../../../constants/topCarousal.json';
+import jsonData from '../../../../../constants/topCarousal.json';
 import { Button, TextField } from '@mui/material';
-import { HeroCard } from '../../../interfaces';
+import { HeroCard } from '../../../../../interfaces';
 
 // interface FormData {
 //     title: string;

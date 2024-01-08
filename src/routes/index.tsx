@@ -5,11 +5,11 @@ import AppLayout from "../layout"
 
 
 /******** Pages ********/
-import HomePage from "../pages/home";
 
 
 // 404
 import NotFoundPage from "../pages/404";
+import {Home} from "../pages/home/home";
 
 
 export const AppRoutes = [
@@ -22,7 +22,7 @@ export const AppRoutes = [
         children: [
             {
                 path: "home",
-                element: <HomePage />
+                element: <Home />
             },
             // More Pages Goes Here
         ]
