@@ -1,0 +1,85 @@
+.heroMain {
+    background-color: #ededed;
+    padding: 30px 0;
+    margin-bottom: 30px;
+
+    .heroText {
+        h1 {
+            font-size: 45px;
+            color: #424242;
+
+            span {
+                color: #FF7222;
+            }
+        }
+
+        p {
+            color: #616161;
+            font-size: 22px;
+        }
+    }
+
+}
+
+.bannerCarousal {
+    background-color: #f5f5f5;
+    padding: 30px;
+    border-radius: 10;
+}
+
+.editCarousalCard {
+    display: flex;
+    align-items: end;
+    align-items: center;
+
+    .CarousalCardBody {
+        padding: 15px;
+        display: flex;
+        gap: 20px;
+        background: white;
+        border-radius: 6px;
+        margin: 10px 0;
+        width: 100%;
+
+        h5 {
+            margin-top: 0;
+        }
+
+        img {
+            border-radius: 6px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .CarousalCardBtn {
+            width: 100%;
+
+            a {
+                background-color: transparent;
+                border: 2px solid #FF7222;
+                color: #FF7222;
+                border-radius: 20px;
+                height: 35px;
+                box-shadow: none;
+            }
+        }
+    }
+}
+
+.uploadBtn {
+    align-items: center;
+
+    label {
+        padding-left: 30px;
+        background-color: #FF7222;
+    }
+}
+
+.no_data_state {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    opacity: 0.6;
+}
