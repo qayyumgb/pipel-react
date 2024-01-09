@@ -1,84 +1,64 @@
-import React, { useState } from 'react';
-
-
-import { Button, Checkbox, FormControlLabel, Grid, TextField, styled } from '@mui/material';
-
-
-import jsonData from '../../../constants/topCarousal.json';
-
-
+import React, { useState, useEffect } from 'react';
+import {
+    Button,
+    Checkbox,
+    FormControlLabel,
+    Grid,
+    TextField,
+    styled,
+} from '@mui/material';
+import styles from "./edit-carousel-form.module.scss";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useUpdateEditDataMutation } from '../../../../redux/slices/home';
+const EditCarousalForm = ({
+    onClose,
+    onEditData,
+    initialData,
+}: {
+    onClose: () => void;
+    onEditData: (data: any) => void;
+    initialData: any;
+}) => {
+    const [formData, setFormData] = useState(initialData);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | undefined>(
+        initialData.image
+    );
 
+    const [updateEditData] = useUpdateEditDataMutation(); // Update the hook based on your actual mutation function
 
-import { useUploadSomeDataMutation } from '../../../redux/slices/home';
-import styles from "./index.module.scss";
-
-
-
-
-// -----------------------------------------------------------------------------------------------------------------------
-
-
-const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddData: (data: any) => void }) => {
-    const initialFormData = {
-        title: '',
-        description: '',
-        order: '',
-        active: false,
-        image: '',
-        action: ''
-    };
-
-    const [formData, setFormData] = useState(initialFormData);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | undefined>(undefined);
-
-
-    const [uploadSomeData] = useUploadSomeDataMutation();
-
-
+    useEffect(() => {
+        setFormData(initialData);
+        setImagePreviewUrl(initialData.image);
+    }, [initialData]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const generatedId = Date.now();
-        const newDataItem = { id: generatedId, ...formData };
-        const newData = [...jsonData, newDataItem];
-
-        console.log(newData);
-        setFormData(initialFormData);
-        const payload = {
-            // create a payload for submitting form
-        }
-
         try {
-            await uploadSomeData({ payload: payload });
+            await updateEditData({ payload: formData });
 
             // show some toast or snackbar message for success
 
             // Success, so close the modal
             onClose();
-
         } catch (error) {
-            console.log('error while adding form data', error);
+            console.log('error while editing form data', error);
         } finally {
             // incase if loader used, stop it here
         }
 
-        onAddData(newDataItem);
+        onEditData(formData);
         onClose();
     };
 
-
-
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
+        setFormData((prevData: any) => ({ ...prevData, [name]: value }));
     };
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: checked }));
+        setFormData((prevData: any) => ({ ...prevData, [name]: checked }));
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,15 +67,13 @@ const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddDat
             const imageUrl = generateImageUrlOrPath(file);
 
             if (imageUrl !== undefined) {
-                setFormData((prevData) => ({ ...prevData, image: imageUrl }));
+                setFormData((prevData: any) => ({ ...prevData, image: imageUrl }));
                 setImagePreviewUrl(imageUrl);
             } else {
-                console.error("Failed to generate image URL");
+                console.error('Failed to generate image URL');
             }
         }
     };
-
-
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -109,13 +87,9 @@ const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddDat
         width: 1,
     });
 
-
-
-
-
     return (
         <form onSubmit={handleSubmit}>
-            <h2 style={{ marginTop: 0 }}>Add Item</h2>
+            <h2 style={{ marginTop: 0 }}>Edit Item</h2>
 
             <Grid container className={styles.uploadBtn} justifyContent="flex-between">
                 <Grid xs={4}>
@@ -131,7 +105,11 @@ const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddDat
 
                 <Grid xs={8}>
                     {imagePreviewUrl && (
-                            <img src={imagePreviewUrl} alt='uploaded img preview' style={{  height: '120px', objectFit: 'contain', borderRadius:6 }} />
+                        <img
+                            src={imagePreviewUrl}
+                            alt="uploaded img preview"
+                            style={{ height: '120px', objectFit: 'contain', borderRadius: 6 }}
+                        />
                     )}
                 </Grid>
             </Grid>
@@ -194,7 +172,7 @@ const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddDat
             />
 
             <Button variant="contained" className="primary-btn" type="submit" color="success">
-                Add Data
+                Update Data
             </Button>
 
             <Button
@@ -211,9 +189,6 @@ const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddDat
     );
 };
 
-
-
-
 function generateImageUrlOrPath(file: File): string | undefined {
     try {
         const imageUrl = URL.createObjectURL(file);
@@ -224,4 +199,4 @@ function generateImageUrlOrPath(file: File): string | undefined {
     }
 }
 
-export default AddCarousalForm;
+export default EditCarousalForm;

@@ -1,0 +1,28 @@
+.heroMain {
+    background-color: #ededed;
+    padding: 30px 0;
+    margin-bottom: 30px;
+
+    .heroText {
+        h1 {
+            font-size: 45px;
+            color: #424242;
+
+            span {
+                color: #FF7222;
+            }
+        }
+
+        p {
+            color: #616161;
+            font-size: 22px;
+        }
+    }
+
+}
+
+.bannerCarousal {
+    background-color: #f5f5f5;
+    padding: 30px;
+    border-radius: 10;
+}

@@ -36,7 +36,17 @@ export const HomeAPI = BASE_API.injectEndpoints({
             invalidatesTags: ["unique_tag_for_this_endpoint"],
         }),
 
+        updateEditData: builder.mutation({
+            query: ({ payload }: any) => ({
+                url: `/some-end-point`,
+                method: API_METHODS.POST,
+                body: payload
+            }),
+
+            invalidatesTags: ["unique_tag_for_this_endpoint"],
+        }),
+
     }),
 });
 
-export const { useHomeCarouselDataQuery, useUploadSomeDataMutation, useUpdateInnerActiveMutation } = HomeAPI;
+export const { useHomeCarouselDataQuery, useUploadSomeDataMutation, useUpdateInnerActiveMutation, useUpdateEditDataMutation } = HomeAPI;

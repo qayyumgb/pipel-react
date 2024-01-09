@@ -1,10 +1,8 @@
-import TopCarousal from "./topCarousal"
+import TopCarousal from "./components/top-carousel/top-carousel"
 
 const MainPage = () => {
     return (
-        <div>
-            <TopCarousal />
-        </div>
+        <TopCarousal />
     )
 }
 

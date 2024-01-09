@@ -1,6 +1,5 @@
 import React from 'react';
-import { Modal, Backdrop, Box, Fade, Slide } from '@mui/material';
-import { TransitionProps } from '@mui/material/transitions';
+import { Modal, Box, Fade } from '@mui/material';
 
 interface ModalWrapperProps {
     open: boolean;

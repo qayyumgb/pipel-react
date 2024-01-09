@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, Container, FormControlLabel, Grid } from '@mui/material';
 // import { useHomeCarouselDataQuery } from '../../../redux/slices/home';
-import styles from './index.module.scss';
-import ModalWrapper from '../../../common/modal';
-import AddCarousalData from './addCarousalForm';
-import CarousalAdded from './carousalAddedData';
-import { HeroCard } from '../../../interfaces/heroCard';
-import { useUploadSomeDataMutation } from '../../../redux/slices/home';
+import styles from './top-carousel.module.scss';
+import ModalWrapper from '../../../../common/modal';
+import AddCarousalData from '../add-carousel-form/add-carousel-form';
+import CarousalAdded from '../carousel-added-data/carousel-added-data';
+import { HeroCard } from '../../../../interfaces/heroCard';
+import { useUploadSomeDataMutation } from '../../../../redux/slices/home';
+import PreviewCarouselItem from '../preview-carousel-item/preview-carousel-item';
 
 
 // -----------------------------------------------------------------------------------------------------------------------
@@ -56,27 +57,15 @@ const TopCarousal: React.FC = () => {
         <>
             <Grid className={styles.heroMain}>
                 <Container>
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <div className={styles.heroText}>
-                                <h1>
-                                    Now is the time to invest
-                                    <span>
-                                        <br /> in tomorrow's innovations
-                                    </span>
-                                </h1>
-                                <p>
-                                    It is really simple to invest in startups, businesses, and real estate and to become an actual partner in Israeli success stories
-                                </p>
-
-                                <Button className="primary-btn">
-                                    I want to invest
-                                </Button>
-
-                                <ModalWrapper open={isCarouselFormOpen} onClose={() => setIsCarouselFormOpen(false)}>
+                    <Grid container alignContent="center">
+                        <Grid item md={6} sm={12}>
+                            
+                        </Grid>
+                        <ModalWrapper open={isCarouselFormOpen} onClose={() => setIsCarouselFormOpen(false)}>
                                     <AddCarousalData onClose={() => setIsCarouselFormOpen(false)} onAddData={handleAddData} />
                                 </ModalWrapper>
-                            </div>
+                        <Grid item md={6} xs={12} sm={12} height="100%">
+                            <PreviewCarouselItem carousalData={carousalData} />
                         </Grid>
 
                     </Grid>
@@ -84,7 +73,7 @@ const TopCarousal: React.FC = () => {
             </Grid>
             <Container>
                 <Grid container>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={12} md={6}>
                         <h2>Banner Carousel</h2>
                         <Grid className={styles.bannerCarousal}>
                             <Grid container>
