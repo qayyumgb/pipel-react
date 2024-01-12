@@ -20,13 +20,6 @@
             top: 0;
             transition: .4s;
             transform: translateY(-50px);
-
-            Button {
-                background-color: #FF7222;
-                color: white;
-                padding: 10px 0px;
-                border-bottom-left-radius: 30px;
-            }
         }
 
         &:hover .editCarousalData {

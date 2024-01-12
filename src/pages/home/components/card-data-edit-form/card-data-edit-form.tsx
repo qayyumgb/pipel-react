@@ -3,14 +3,11 @@ import {
     Button,
     Checkbox,
     FormControlLabel,
-    Grid,
     TextField,
-    styled,
 } from '@mui/material';
-import styles from "./edit-carousel-form.module.scss";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+// import styles from "./card-data-edit-form.module.scss";
 import { useUpdateEditDataMutation } from '../../../../redux/slices/home';
-const EditCarousalForm = ({
+const CardDataEdit = ({
     onClose,
     onEditData,
     initialData,
@@ -22,15 +19,11 @@ const EditCarousalForm = ({
     updateLocalCheckboxState: (itemId: string, checked: boolean) => void;
 }) => {
     const [formData, setFormData] = useState(initialData);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | undefined>(
-        initialData.image
-    );
 
     const [updateEditData] = useUpdateEditDataMutation(); // Update the hook based on your actual mutation function
 
     useEffect(() => {
         setFormData(initialData);
-        setImagePreviewUrl(initialData.image);
     }, [initialData]);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -38,6 +31,7 @@ const EditCarousalForm = ({
 
         try {
             await updateEditData({ payload: formData });
+            console.log("Updated Card Data Item ------>>>")
 
             // show some toast or snackbar message for success
 
@@ -65,58 +59,9 @@ const EditCarousalForm = ({
         updateLocalCheckboxState(formData.id, checked);
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0];
-            const imageUrl = generateImageUrlOrPath(file);
-
-            if (imageUrl !== undefined) {
-                setFormData((prevData: any) => ({ ...prevData, image: imageUrl }));
-                setImagePreviewUrl(imageUrl);
-            } else {
-                console.error('Failed to generate image URL');
-            }
-        }
-    };
-
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-    });
-
     return (
         <form onSubmit={handleSubmit}>
-            <h2 style={{ marginTop: 0 }}>Edit Item</h2>
-
-            <Grid container className={styles.uploadBtn} justifyContent="flex-between">
-                <Grid xs={4}>
-                    <Button
-                        component="label"
-                        sx={{ marginBottom: 2 }}
-                        variant="contained"
-                        startIcon={<CloudUploadIcon />}
-                    >
-                        <VisuallyHiddenInput type="file" onChange={handleImageChange} />
-                    </Button>
-                </Grid>
-
-                <Grid xs={8}>
-                    {imagePreviewUrl && (
-                        <img
-                            src={imagePreviewUrl}
-                            alt="uploaded img preview"
-                            style={{ height: '120px', objectFit: 'contain', borderRadius: 6 }}
-                        />
-                    )}
-                </Grid>
-            </Grid>
+            <h2 style={{ marginTop: 0 }}>Edit Card Item</h2>
 
             <TextField
                 sx={{ width: '100%', marginBottom: 2 }}
@@ -193,14 +138,4 @@ const EditCarousalForm = ({
     );
 };
 
-function generateImageUrlOrPath(file: File): string | undefined {
-    try {
-        const imageUrl = URL.createObjectURL(file);
-        return imageUrl;
-    } catch (error) {
-        console.error('Failed to generate image URL', error);
-        return undefined;
-    }
-}
-
-export default EditCarousalForm;
+export default CardDataEdit;

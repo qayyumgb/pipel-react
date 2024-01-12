@@ -1,8 +1,6 @@
 import { Button, Grid } from '@mui/material';
 import React from 'react';
-import styles from "./preview-carousel-item.module.scss";
-import { HeroCard } from '../../../../interfaces/heroCard';
-import emptyState from '../../../../assets/images/emptyState.svg';
+import styles from "./preview-card-data.module.scss";
 import { Link as RouterLink } from 'react-router-dom'
 import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,25 +9,28 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
-import { width } from '@mui/system';
-interface CarousalAddedProps {
-    carousalData: HeroCard[];
+import { CardDataJson } from '../../../../interfaces';
+interface CardDataAdded {
+    cardDataMain: CardDataJson[];
 }
 
-const PreviewCarouselItem: React.FC<CarousalAddedProps> = ({ carousalData }) => {
+const PreviewCardDataItem: React.FC<CardDataAdded> = ({ cardDataMain }) => {
     // Display only the first item
-    const firstItem = carousalData.length > 0 ? carousalData : null;
-    console.log('test', carousalData)
+    const firstItem = cardDataMain.length > 0 ? cardDataMain : null;
+    console.log('test', cardDataMain)
     return (
         <>
             <Grid container justifyContent="center">
                 <Swiper loop={true} navigation={true} modules={[Navigation]} className="mySwiper" style={{ width: '100%' }}>
-                    {carousalData.map((item: HeroCard, index: number) => (
+                    {cardDataMain.map((item: CardDataJson, index: number) => (
                         <SwiperSlide>
-                            <div className={styles.previewMain} style={{ backgroundImage: `url(${item.image})` }} key={index}>
+                            <div className={styles.previewMain} key={index}>
                                 <div className={styles.previewContent}>
                                     <div className={styles.previewBody}>
-                                        <h5>{item.title}</h5>
+                                        <div>
+                                            <h5>{item.title}</h5>
+                                            <p>{item.description}</p>
+                                        </div>
                                         <div className={styles.previewBtn}>
                                             <Button className={styles.previewButton} component={RouterLink} to={item.action}>
                                                 <EastIcon />
@@ -48,4 +49,4 @@ const PreviewCarouselItem: React.FC<CarousalAddedProps> = ({ carousalData }) => 
     );
 };
 
-export default PreviewCarouselItem;
+export default PreviewCardDataItem;

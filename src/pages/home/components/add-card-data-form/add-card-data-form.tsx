@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
-
-
-import { Button, Checkbox, FormControlLabel, Grid, TextField, styled } from '@mui/material';
-
-
-import jsonData from '../../../../constants/topCarousal.json';
-
-
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-
-
+import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import cardJson from '../../../../constants/card-data.json';
 import { useUploadSomeDataMutation } from '../../../../redux/slices/home';
-import styles from "./add-carousel-form.module.scss";
 
 
 
@@ -19,30 +9,24 @@ import styles from "./add-carousel-form.module.scss";
 // -----------------------------------------------------------------------------------------------------------------------
 
 
-const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddData: (data: any) => void }) => {
+const AddCardDataForm = ({ onClose, onAddData }: { onClose: () => void; onAddData: (data: any) => void }) => {
     const initialFormData = {
         title: '',
         description: '',
         order: '',
         active: false,
-        image: '',
         action: ''
     };
 
     const [formData, setFormData] = useState(initialFormData);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | undefined>(undefined);
-
-
     const [uploadSomeData] = useUploadSomeDataMutation();
-
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const generatedId = Date.now();
         const newDataItem = { id: generatedId, ...formData };
-        const newData = [...jsonData, newDataItem];
+        const newData = [...cardJson, newDataItem];
 
         console.log(newData);
         setFormData(initialFormData);
@@ -81,60 +65,9 @@ const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddDat
         setFormData((prevData) => ({ ...prevData, [name]: checked }));
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0];
-            const imageUrl = generateImageUrlOrPath(file);
-
-            if (imageUrl !== undefined) {
-                setFormData((prevData) => ({ ...prevData, image: imageUrl }));
-                setImagePreviewUrl(imageUrl);
-            } else {
-                console.error("Failed to generate image URL");
-            }
-        }
-    };
-
-
-
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-    });
-
-
-
-
-
     return (
         <form onSubmit={handleSubmit}>
             <h2 style={{ marginTop: 0 }}>Add Item</h2>
-
-            <Grid container className={styles.uploadBtn} justifyContent="flex-between">
-                <Grid item xs={4}>
-                    <Button
-                        component="label"
-                        sx={{ marginBottom: 2 }}
-                        variant="contained"
-                        startIcon={<CloudUploadIcon />}
-                    >
-                        <VisuallyHiddenInput type="file" onChange={handleImageChange} />
-                    </Button>
-                </Grid>
-
-                <Grid item xs={8}>
-                    {imagePreviewUrl && (
-                        <img src={imagePreviewUrl} alt='uploaded img preview' style={{ height: '120px', objectFit: 'contain', borderRadius: 6 }} />
-                    )}
-                </Grid>
-            </Grid>
 
             <TextField
                 sx={{ width: '100%', marginBottom: 2 }}
@@ -211,17 +144,4 @@ const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddDat
     );
 };
 
-
-
-
-function generateImageUrlOrPath(file: File): string | undefined {
-    try {
-        const imageUrl = URL.createObjectURL(file);
-        return imageUrl;
-    } catch (error) {
-        console.error('Failed to generate image URL', error);
-        return undefined;
-    }
-}
-
-export default AddCarousalForm;
+export default AddCardDataForm;
