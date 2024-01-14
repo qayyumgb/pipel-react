@@ -5,7 +5,12 @@ import {
     Container,
     FormControlLabel,
     Grid,
+    ThemeProvider,
+    createTheme,
 } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import styles from './top-carousel.module.scss';
@@ -23,6 +28,23 @@ import PreviewCarouselItem from '../preview-carousel-item/preview-carousel-item'
 import PreviewCardDataItem from '../preview-card-data/preview-card-data';
 import AddCardDataForm from '../add-card-data-form/add-card-data-form';
 import CardDataAdded from '../card-data-added/card-data-added';
+
+const TabPanel = (props:any) => {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`tabpanel-${index}`}
+        aria-labelledby={`tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box p={3}>{children}</Box>}
+      </div>
+    );
+  };
+
 
 const TopCarousal: React.FC = () => {
     const [isCarouselFormOpen, setIsCarouselFormOpen] = useState(false);
@@ -153,15 +175,34 @@ const TopCarousal: React.FC = () => {
         setCardDataItemToDelete(itemId);
     };
 
+    
     // Function to close the delete confirmation modal
     const handleCloseCardDataDeleteModal = () => {
         setCardDataItemToDelete(null);
     };
+    const [value, setValue] = useState(0);
 
+    const handleChange = (event:any, newValue:any) => {
+      setValue(newValue);
+    };
+    const customTheme = createTheme({
+        components: {
+          MuiTabs: {
+            styleOverrides: {
+              indicator: {
+                backgroundColor: '#FF7222', // Change this to your desired indicator color
+            
+              },
+              
+            },
+          },
+         
+        },
+      });
     const previewSection: React.ReactNode = isPreviewVisible ? (
         <Grid className={styles.heroMain}>
             <Container>
-                <Grid container alignContent="center">
+                <Grid container alignContent="center" >
                     <Grid item xs={6}>
                     </Grid>
                     <Grid item xs={6} height="100%">
@@ -173,13 +214,7 @@ const TopCarousal: React.FC = () => {
     ) : isCardDataPreview ? (
         <Grid className={styles.heroMain}>
             <Container>
-                <Grid container alignContent="center">
-                    <Grid item xs={6}>
-                    </Grid>
-                    <Grid item xs={6} height="100%">
-                        <PreviewCardDataItem cardDataMain={isCardData} />
-                    </Grid>
-                </Grid>
+                <PreviewCardDataItem cardDataMain={isCardData} />
             </Container>
         </Grid>
     ) : null;
@@ -188,9 +223,20 @@ const TopCarousal: React.FC = () => {
         <>
             {previewSection}
 
-            <Container>
-                <Grid container spacing={4}>
-                    <Grid item xs={6}>
+    <Container>
+    <ThemeProvider theme={customTheme}>
+        
+        <Tabs value={value} onChange={handleChange} style={{padding:15}}>
+            <Tab label="Banner Data" sx={{
+            '&.Mui-selected': {color: '#FF7222',},
+          }}/>
+            <Tab label="Card Data" sx={{
+            '&.Mui-selected': {color: '#FF7222',},
+          }}/>
+        </Tabs>
+      </ThemeProvider>
+      <TabPanel value={value} index={0}>
+        <Grid item xs={12}>
                         <Grid container justifyContent="space-between" alignItems="center">
                             <Grid item xs="auto">
                                 <h2>Banner Carousel</h2>
@@ -235,11 +281,13 @@ const TopCarousal: React.FC = () => {
                                 </ModalWrapper>
                             </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid item xs={6}>
+        </Grid>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <Grid item xs={12}>
                         <Grid container justifyContent="space-between" alignItems="center">
                             <Grid item xs="auto">
-                                <h2>Card Data Carousel</h2>
+                                <h2>Card Carousel</h2>
                             </Grid>
                             <Grid item xs="auto">
                                 <Button className="secondary-btn" onClick={handleCardDataPreview}>
@@ -286,9 +334,9 @@ const TopCarousal: React.FC = () => {
                             <Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
-                </Grid>
-            </Container>
+        </Grid>
+      </TabPanel>
+    </Container>
         </>
     );
 };

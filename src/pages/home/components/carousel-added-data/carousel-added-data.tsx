@@ -25,7 +25,7 @@ const CarousalAdded: React.FC<CarousalAddedProps> = ({ carousalData, checkboxSta
     const [editedItemId, setEditedItemId] = useState<string | null>(null);
 
     const [updateInnerActive] = useUpdateInnerActiveMutation();
-    
+
 
     const handleDragEnd = (result: any) => {
         if (!result.destination) {
@@ -38,7 +38,7 @@ const CarousalAdded: React.FC<CarousalAddedProps> = ({ carousalData, checkboxSta
         const updatedFormData = updatedItems.map((item, index) => ({
             ...item,
             order: index + 1,
-          }));
+        }));
         setItems(updatedFormData);
     }
 
@@ -47,7 +47,7 @@ const CarousalAdded: React.FC<CarousalAddedProps> = ({ carousalData, checkboxSta
         setItems(sortedCarouselData)
         // Update local checkbox state when the external checkbox state changes
         setLocalCheckboxState(checkboxState);
-    }, [checkboxState,carousalData]);
+    }, [checkboxState, carousalData]);
 
     const updateLocalCheckboxState = (itemId: string, checked: boolean) => {
         setLocalCheckboxState((prevState) => ({
@@ -62,21 +62,27 @@ const CarousalAdded: React.FC<CarousalAddedProps> = ({ carousalData, checkboxSta
             [itemId]: checked,
         }));
 
+        setItems((prevItems) =>
+            prevItems.map((item) =>
+                item.id === itemId ? { ...item, active: checked } : item
+            )
+        );
+
         const payload = {
-            // create a payload for submitting form
-        }
+            id: itemId,
+            active: checked,
+        };
 
         try {
-            await updateInnerActive({ payload: payload });
+            await updateInnerActive({ payload });
 
-            // show some toast or snackbar message for success
-
-            console.log("API hit on Active Checkbox")
+            console.log("API hit on Active Checkbox");
 
         } catch (error) {
-            console.log('error while adding form data', error);
+            console.log('Error while updating checkbox state', error);
+            // Handle error - show an error message or perform other actions
         } finally {
-            // incase if loader used, stop it here
+            // In case if loader used, stop it here
         }
     };
 
@@ -143,12 +149,12 @@ const CarousalAdded: React.FC<CarousalAddedProps> = ({ carousalData, checkboxSta
                                                                     <img src={item?.image} width={120} />
                                                                     <div className={styles.cardBodyInfo}>
                                                                         <div className={styles.editCarousalData}>
-                                                                        <IconButton aria-label="delete" size="small" color='error' onClick={() => handleDeleteButtonClick(item.id)}>
-                                                                          <DeleteIcon />
-                                                                        </IconButton>
-                                                                        <IconButton aria-label="edit" size="small" style={{ marginLeft: '3px' }}  onClick={() => handleEditButtonClick(item.id)}>
-                                                                            <EditIcon />
-                                                                        </IconButton>
+                                                                            <IconButton aria-label="delete" size="small" color='error' onClick={() => handleDeleteButtonClick(item.id)}>
+                                                                                <DeleteIcon />
+                                                                            </IconButton>
+                                                                            <IconButton aria-label="edit" size="small" style={{ marginLeft: '3px' }} onClick={() => handleEditButtonClick(item.id)}>
+                                                                                <EditIcon />
+                                                                            </IconButton>
 
                                                                         </div>
                                                                         <ModalWrapper open={editedItemId === item.id} onClose={handleModalClose}>

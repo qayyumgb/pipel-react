@@ -17,6 +17,11 @@ import reportWebVitals from './reportWebVitals';
 
 import './index.scss';
 
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
+
 
 
 const root = ReactDOM.createRoot(
@@ -27,10 +32,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

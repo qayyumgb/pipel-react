@@ -1,4 +1,4 @@
-import { Button, Checkbox, FormControlLabel, Grid } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, Grid, IconButton } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import styles from "./card-data-added.module.scss";
 import { useUpdateInnerActiveMutation } from '../../../../redux/slices/home';
@@ -34,13 +34,18 @@ const CardDataAdded: React.FC<CarousalAddedProps> = ({ cardAddedData, checkboxSt
         const updatedItems = Array.from(items);
         const [reorderedItem] = updatedItems.splice(result.source.index, 1);
         updatedItems.splice(result.destination.index, 0, reorderedItem);
+        const updatedFormData = updatedItems.map((item, index) => ({
+            ...item,
+            order: index + 1,
+        }));
+        setItems(updatedFormData);
 
         setItems(updatedItems);
     }
 
-
+    const sortedCardData = [...cardAddedData].sort((a, b) => a.order - b.order);
     useEffect(() => {
-        setItems(cardAddedData)
+        setItems(sortedCardData)
         // Update local checkbox state when the external checkbox state changes
         setLocalCheckboxState(checkboxState);
     }, [checkboxState, cardAddedData]);
@@ -52,30 +57,32 @@ const CardDataAdded: React.FC<CarousalAddedProps> = ({ cardAddedData, checkboxSt
         }));
     };
 
-    const handleCheckboxChange = async (itemId: string, checked: boolean) => {
+    const handleCheckboxChange = (itemId: string, checked: boolean) => {
         setLocalCheckboxState((prevState) => ({
             ...prevState,
             [itemId]: checked,
         }));
 
+        setItems((prevItems) =>
+            prevItems.map((item) =>
+                item.id === itemId ? { ...item, active: checked } : item
+            )
+        );
+
         const payload = {
-            // create a payload for submitting form
-        }
+            id: itemId,
+            active: checked,
+        };
 
         try {
-            await updateInnerActive({ payload: payload });
-            // show some toast or snackbar message for success
-            console.log("API hit on Active Checkbox")
-
+            console.log("API hit on Active Checkbox");
         } catch (error) {
-            console.log('error while adding form data', error);
+            console.log('error while updating checkbox state', error);
         } finally {
-            // incase if loader used, stop it here
         }
     };
 
     const handleEditCardData = (itemId: string, editedData: any) => {
-        // Update the item in the local state or dispatch an action to update it in Redux
         const updatedItems = items.map((item) =>
             item.id === itemId ? { ...item, ...editedData } : item
         );
@@ -100,7 +107,7 @@ const CardDataAdded: React.FC<CarousalAddedProps> = ({ cardAddedData, checkboxSt
     };
     return (
         <Grid item xs={12}  >
-            {cardAddedData.length > 0 ? (
+            {sortedCardData.length > 0 ? (
                 <>
                     <form onSubmit={() => handleSubmit(items)}>
                         <DragDropContext onDragEnd={handleDragEnd}>
@@ -135,14 +142,12 @@ const CardDataAdded: React.FC<CarousalAddedProps> = ({ cardAddedData, checkboxSt
                                                             <div className={styles.cardDataBody}>
                                                                 <div className={styles.cardBodyInfo}>
                                                                     <div className={styles.cardDataEditBtn}>
-                                                                        <Button variant="contained" style={{ padding: '5px' }} color='error' onClick={() => handleDeleteButtonClick(item.id)}>
-                                                                            <DeleteIcon />
-                                                                        </Button>
-                                                                        <Button className='primary-btn' style={{ padding: '5px' }} variant="contained" color="success"
-                                                                            onClick={() => handleEditButtonClick(item.id)}
-                                                                        >
-                                                                            <EditIcon />
-                                                                        </Button>
+                                                                    <IconButton aria-label="delete" size="small" color='error' onClick={() => handleDeleteButtonClick(item.id)}>
+                                                                                <DeleteIcon />
+                                                                            </IconButton>
+                                                                            <IconButton aria-label="edit" size="small" style={{ marginLeft: '3px' }} onClick={() => handleEditButtonClick(item.id)}>
+                                                                                <EditIcon />
+                                                                            </IconButton>
                                                                     </div>
                                                                     <ModalWrapper open={editedItemId === item.id} onClose={handleModalClose}>
                                                                         <CardDataEdit
