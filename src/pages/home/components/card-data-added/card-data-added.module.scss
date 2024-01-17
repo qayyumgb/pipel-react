@@ -15,11 +15,12 @@
         vertical-align: middle;
         border-color: inherit;
         }
-        
+        .td{
+          background-color: #fff;
+         }
       .tr {    
-        display: table-row;
+        display: flex;
         border-bottom: 1px solid #E5E7EB;
-        
         .td,.th {
           display: table-cell;
           padding: 16px 12px;

@@ -122,11 +122,11 @@ const CarousalAdded: React.FC<CarousalAddedProps> = ({
                   <div className={styles.Table} ref={provided.innerRef}>
                     <div className={styles.thead}>
                       <div className={styles.tr}>
-                        <span className={styles.th}>סדר</span>
-                        <span className={styles.th}>כותרת</span>
-                        <span className={styles.th}>תמונה</span>
-                        <span className={styles.th}>כתובת אתר</span>
-                        <span className={styles.th}></span>
+                        <span className={`${styles.th} w-5`}>סדר</span>
+                        <span className={`${styles.th} w-20`}>כותרת</span>
+                        <span className={`${styles.th} w-10`}>תמונה</span>
+                        <span className={`${styles.th} w-25`}>כתובת אתר</span>
+                        <span className={`${styles.th} w-25`}></span>
                       </div>
                     </div>
 
@@ -142,22 +142,22 @@ const CarousalAdded: React.FC<CarousalAddedProps> = ({
                             {...provided.draggableProps}
                             className={styles.tr}
                           >
-                            <span className={styles.td}>{item.order}</span>
-                            <span className={styles.td}>{item.title}</span>
-                            <span className={styles.td}>
+                            <span className={`${styles.td} w-5`}>{item.order}</span>
+                            <span className={`${styles.td} w-20`}>{item.title}</span>
+                            <span className={`${styles.td} w-10`} >
                               <img
                                 src={item?.image}
                                 className={styles.itemImage}
                                 alt=""
                               />
                             </span>
-                            <span className={styles.td}>{item.action}</span>
+                            <span className={`${styles.td} w-25`}>{item.action}</span>
                             <span
-                              className={styles.td}
+                              className={`${styles.td} w-25`}
                               style={{ textAlign: "left" }}
                             >
                               <IconButton
-                              classes={styles.iconBtn}
+                                classes={styles.iconBtn}
                                 aria-label="edit"
                                 size="small"
                                 onClick={() => onUpdateIconClick(item)}
@@ -165,7 +165,7 @@ const CarousalAdded: React.FC<CarousalAddedProps> = ({
                                 <img src={edit} alt="" />
                               </IconButton>
                               <IconButton
-                              classes={styles.iconBtn}
+                                classes={styles.iconBtn}
                                 aria-label="edit"
                                 size="small"
                                 onClick={() => onPreviewCarousel(item.id)}
@@ -173,7 +173,7 @@ const CarousalAdded: React.FC<CarousalAddedProps> = ({
                                 <img src={view} alt="" />
                               </IconButton>
                               <IconButton
-                              classes={styles.iconBtn}
+                                classes={styles.iconBtn}
                                 aria-label="delete"
                                 size="small"
                                 {...provided.dragHandleProps}
@@ -181,7 +181,7 @@ const CarousalAdded: React.FC<CarousalAddedProps> = ({
                                 <ZoomOutMapIcon />
                               </IconButton>
                               <IconButton
-                              classes={styles.iconBtn}
+                                classes={styles.iconBtn}
                                 aria-label="delete"
                                 size="small"
                                 onClick={() => handleDeleteButtonClick(item.id)}

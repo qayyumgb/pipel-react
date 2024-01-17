@@ -1,29 +1,31 @@
-import { Button, Grid, IconButton } from "@mui/material";
 import React from "react";
-import styles from "./preview-carousel-item.module.scss";
-import { HeroCard } from "../../../../interfaces/heroCard";
+import { Button, Grid, IconButton } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
 import CloseIcon from "@mui/icons-material/Close";
+import styles from "./preview-carousel-item.module.scss";
+import { HeroCard } from "../../../../interfaces/heroCard";
 
 interface CarousalAddedProps {
   carousalData: HeroCard[];
+  selectedItemId: string | null;
   onClose: () => void;
 }
 
 const PreviewCarouselItem: React.FC<CarousalAddedProps> = ({
   carousalData,
+  selectedItemId,
   onClose,
 }) => {
-  // Display only the first item
-  const firstItem = carousalData.length > 0 ? carousalData : null;
-  console.log("test", carousalData);
+
+  const selectedItem = carousalData.find((item) => item.id === selectedItemId);
 
   return (
     <>
       <Grid container justifyContent="center">
-        {carousalData.map((item: HeroCard, index: number) => (
-          <div key={index} style={{width: '100%'}}>
+        {selectedItem && (
+          <div style={{ width: '100%' }}>
+            {/* Modal Header */}
             <Grid
               className={styles.modalHeader}
               item
@@ -32,8 +34,9 @@ const PreviewCarouselItem: React.FC<CarousalAddedProps> = ({
               justifyContent={"space-between"}
             >
               <h2 style={{ margin: 0, fontSize: 24, fontWeight: 600 }}>
-                Preview Item
+                תצוגה מקדימה
               </h2>
+              {/* Close button */}
               <IconButton
                 onClick={onClose}
                 aria-label="close"
@@ -42,18 +45,23 @@ const PreviewCarouselItem: React.FC<CarousalAddedProps> = ({
                 <CloseIcon />
               </IconButton>
             </Grid>
+
+            {/* Main Preview Content */}
             <div
               className={styles.previewMain}
-              style={{ backgroundImage: `url(${item.image})` }}
+              style={{ backgroundImage: `url(${selectedItem.image})`, height: '360px' }}
             >
               <div className={styles.previewContent}>
                 <div className={styles.previewBody}>
-                  <h5>{item.title}</h5>
+                  {/* Display item title */}
+                  <h5>{selectedItem.title}</h5>
+
+                  {/* Preview Button */}
                   <div className={styles.previewBtn}>
                     <Button
                       className={styles.previewButton}
                       component={RouterLink}
-                      to={item.action}
+                      to={selectedItem.action}
                     >
                       <WestIcon />
                     </Button>
@@ -61,8 +69,16 @@ const PreviewCarouselItem: React.FC<CarousalAddedProps> = ({
                 </div>
               </div>
             </div>
+
+            <div className={styles.carouselDots}>
+              <div className={styles.grayDot}></div>
+              <div className={styles.orangeDot}></div>
+              <div className={styles.grayDot}></div>
+              <div className={styles.grayDot}></div>
+              <div className={styles.grayDot}></div>
+            </div>
           </div>
-        ))}
+        )}
       </Grid>
     </>
   );

@@ -1,31 +1,24 @@
 import React, { useEffect, useState } from 'react';
-
 import {
   Button,
-  Checkbox,
-  FormControlLabel,
   Grid,
   IconButton,
-  TextField,
   styled,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-
-import jsonData from '../../../../constants/topCarousal.json';
-
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-
 import { useUploadSomeDataMutation } from '../../../../redux/slices/home';
 import styles from './add-carousel-form.module.scss';
 import LabelForm from '../../../../common/form-label';
 import InputForm from '../../../../common/form-input';
+import { FiEdit } from "react-icons/fi";
 
 const AddCarousalForm = ({
   onClose,
   onAddData,
+  onUpdateData,
   formMode,
   initialFormObject,
-  onUpdateData,
 }: {
   onClose: () => void;
   onAddData: (data: any) => void;
@@ -35,14 +28,13 @@ const AddCarousalForm = ({
 }) => {
   const [formData, setFormData] = useState(initialFormObject);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | undefined>(
-    undefined
-  );
+    initialFormObject.image || undefined
+  ); // Simplified setting initial image preview URL
 
   useEffect(() => {
-    if (initialFormObject.image !== '') {
-      setImagePreviewUrl(initialFormObject.image);
-    }
+    setImagePreviewUrl(initialFormObject.image || undefined);
   }, [initialFormObject]);
+
   const [uploadSomeData] = useUploadSomeDataMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,11 +53,6 @@ const AddCarousalForm = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData: any) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setFormData((prevData: any) => ({ ...prevData, [name]: checked }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +93,7 @@ const AddCarousalForm = ({
         <h2 style={{ margin: 0, fontSize: 24, fontWeight: 600 }}>
           {formMode} Item
         </h2>
-        <IconButton onClick={onClose} aria-label="close" style={{padding: '5px', background: '#E5E7EB'}}>
+        <IconButton onClick={onClose} aria-label="close" style={{ padding: '5px', background: '#E5E7EB' }}>
           <CloseIcon />
         </IconButton>
       </Grid>
@@ -116,38 +103,64 @@ const AddCarousalForm = ({
         className={styles.uploadBtn}
         justifyContent="flex-between"
       >
-        <Grid item>
-          <Button
-            component="label"
-            variant="contained"
-            startIcon={<CloudUploadIcon />}
-          >
-            <VisuallyHiddenInput type="file" onChange={handleImageChange} />
-          </Button>
+        <Grid item position="relative">
+          {formMode === 'Add' ? (
+            <div className={styles.editImageMain}>
+              <Button
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+                className={styles.editImageIcon}
+              >
+                <VisuallyHiddenInput type="file" onChange={handleImageChange} />
+              </Button>
+            </div>
+          ) : (
+            <div className={styles.editImageMain}>
+              <Button
+                component="label"
+                startIcon={<FiEdit />}
+                className={styles.editImageIcon}
+              >
+                <VisuallyHiddenInput type="file" onChange={handleImageChange} />
+              </Button>
+            </div>
+          )}
         </Grid>
 
         <Grid item>
-          {imagePreviewUrl && (
+          {imagePreviewUrl ? (
             <img
               src={imagePreviewUrl}
               alt="uploaded img preview"
               style={{
-                height: '120px',
-                objectFit: 'contain',
+                height: '84px',
+                width: '84px',
+                objectFit: 'cover',
                 borderRadius: 6,
               }}
             />
+          ) : (
+            <div
+              style={{
+                height: '84px',
+                width: '84px',
+                border: '1px solid #ccc',
+                borderRadius: 6,
+              }}
+            >
+            </div>
           )}
         </Grid>
       </Grid>
 
       <div className='formGroup'>
-        <LabelForm labelText="Title" />
+        <LabelForm labelText="כותרת" />
         <InputForm type="text" placehloder='Enter title here' name='title' onChange={handleInputChange} value={formData.title} id='title' />
       </div>
 
       <div className='formGroup'>
-        <LabelForm labelText="Button Url" />
+        <LabelForm labelText="כתובת אתר" />
         <InputForm
           name='action'
           value={formData.action}
@@ -158,7 +171,7 @@ const AddCarousalForm = ({
       </div>
 
       <div className='formGroup'>
-        <LabelForm labelText="Order" />
+        <LabelForm labelText="סדר" />
         <InputForm
           name='order'
           value={formData.order}

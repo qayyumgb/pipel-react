@@ -16,22 +16,22 @@ import PostList from "../pages/home/components/post-list/post-list";
 
 export const AppRoutes = [
 
-    { path: "/", element: <Navigate to="home" /> },
+    { path: "/", element: <Navigate to="home/carousel" /> },
 
     {
         path: "/",
-        element: <AppLayout />, 
+        element: <AppLayout />,
         children: [
             {
                 path: "home",
                 element: <HomePage />,
-                children:[
+                children: [
                     {
-                        path:"carousel",
+                        path: "carousel",
                         element: <CarouelList />
                     },
                     {
-                        path:"post",
+                        path: "post",
                         element: <PostList />
                     }
                 ]

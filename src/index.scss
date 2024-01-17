@@ -3,6 +3,9 @@
 @import 'swiper/css/pagination';
 @import 'swiper/css/effect-fade';
 
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -40,6 +43,11 @@ body {
     padding: 10px 32px;
     text-transform: capitalize;
     border: 1px solid #F99050;
+
+    &.randomBtn {
+      color: white;
+      background-color: #F99050;
+    }
   }
 
   .btn-round {
@@ -50,4 +58,34 @@ body {
 
 .formGroup {
   margin-top: 20px;
+}
+
+.MuiListItem-gutters{
+  &.active {
+    background-color: #fff4ee;
+    border-left: 3px solid #F99050;
+    span {
+      color: #FF7222;
+    }
+    svg{
+      path{
+        stroke: #F99050;
+      }
+    }
+  }
+  .MuiListItemIcon-root{
+    min-width: 36px;
+  }
+}
+.w-25{
+  flex: 2;
+}
+.w-20{
+  flex: 1.5;
+}
+.w-10{
+  flex: 1;
+}
+.w-5{
+  flex: 0.5;
 }

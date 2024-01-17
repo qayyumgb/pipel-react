@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
 import AddIcon from '@mui/icons-material/Add';
 import styles from './post-list.module.scss';
 import { CardDataJson } from '../../../../interfaces/index';
@@ -20,6 +20,7 @@ import flag1 from '../../../../assets/images/isreal.png';
 import flag2 from '../../../../assets/images/usFlag.png';
 import AddPostForm from '../add-card-data-form/add-card-data-form';
 import PostAdded from '../card-data-added/card-data-added';
+import PreviewItem from '../preview-item/preview-item';
 
 const PostList: React.FC = () => {
   const [isCarouselFormOpen, setIsCarouselFormOpen] = useState(false);
@@ -42,6 +43,7 @@ const PostList: React.FC = () => {
     string | null
   >(null);
   const [formMode, setFormMode] = useState('Add');
+  const [isRandomOrderActive, setRandomOrderActive] = useState(false)
 
   const [uploadSomeData] = useUploadSomeDataMutation();
 
@@ -79,6 +81,8 @@ const PostList: React.FC = () => {
     } finally {
       // in case if loader used, stop it here
     }
+
+    setRandomOrderActive((prev) => !prev)
   };
 
 
@@ -141,6 +145,8 @@ const PostList: React.FC = () => {
     setIsCarouselFormOpen(true);
   };
 
+  const isLanguageSelected = (language: string) => langauage === language;
+
   return (
     <>
       <Container>
@@ -157,11 +163,9 @@ const PostList: React.FC = () => {
             <Grid item xs={6} display={'flex'} justifyContent={'end'} gap={1}>
               <Button
                 onClick={checkBoxHandler}
-                className="secondary-btn btn-round"
+                className={`secondary-btn btn-round ${isRandomOrderActive ? 'randomBtn' : ''}`}
                 variant="outlined"
-                startIcon={
-                  <SyncAltIcon style={{ marginLeft: 10, marginRight: 0 }} />
-                }
+                startIcon={<ShuffleIcon style={{ marginLeft: 10, marginRight: 0 }} />}
                 color="success"
               >
                 סדר אקראי
@@ -196,7 +200,7 @@ const PostList: React.FC = () => {
           <ThemeProvider theme={customTheme}>
             <Tabs value={0} className={styles.tabWrapper}>
               <Tab
-                className={styles.tabCustom}
+                className={`${styles.tabCustom} ${isLanguageSelected('HE') ? styles.activeTab : ''}`}
                 onClick={() => handleLanguage('HE')}
                 label={
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -207,7 +211,7 @@ const PostList: React.FC = () => {
               />
 
               <Tab
-                className={styles.tabCustom}
+                className={`${styles.tabCustom} ${isLanguageSelected('EN') ? styles.activeTab : ''}`}
                 onClick={() => handleLanguage('EN')}
                 label={
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -228,10 +232,18 @@ const PostList: React.FC = () => {
               onPreviewCarousel={onPreviewIconClick}
             />
             <ModalWrapper maxWidth='641px' open={Boolean(PreviewCardItem)} onClose={() => setPreviewCardItem(null)}>
-              <PreviewCardDataItem cardDataMain={postData} onClose={() => setPreviewCardItem(null)} />
-              </ModalWrapper>
+              <PreviewCardDataItem cardDataMain={postData} onClose={() => setPreviewCardItem(null)} selectedItemId={PreviewCardItem} />
+              {/* <PreviewItem
+                id={postData.find((item) => item.id === PreviewCardItem)?.id || ''}
+                title={postData.find((item) => item.id === PreviewCardItem)?.title || ''}
+                description={postData.find((item) => item.id === PreviewCardItem)?.description || ''}
+                order={postData.find((item) => item.id === PreviewCardItem)?.order || 0}
+                action={postData.find((item) => item.id === PreviewCardItem)?.action || ''}
+                onClose={() => setPreviewCardItem(null)}
+              /> */}
+            </ModalWrapper>
             <ModalWrapper
-            maxWidth='437px'
+              maxWidth='437px'
               open={Boolean(cardItemToDelete)}
               onClose={handleCloseCardDeleteModal}
             >

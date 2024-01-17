@@ -123,11 +123,11 @@ const PostAdded: React.FC<PostAddedProps> = ({
                   <div className={styles.Table} ref={provided.innerRef}>
                     <div className={styles.thead}>
                       <div className={styles.tr}>
-                        <span className={styles.th}>סדר</span>
-                        <span className={styles.th}>כותרת</span>
-                        <span className={styles.th}>תמונה</span>
-                        <span className={styles.th}>כתובת אתר</span>
-                        <span className={styles.th}></span>
+                        <span className={`${styles.th} w-5`}>סדר</span>
+                        <span className={`${styles.th} w-20`}>כותרת</span>
+                        <span className={`${styles.th} w-25`}>תמונה</span>
+                        <span className={`${styles.th} w-25`}>כתובת אתר</span>
+                        <span className={`${styles.th} w-20`}></span>
                       </div>
                     </div>
 
@@ -143,14 +143,14 @@ const PostAdded: React.FC<PostAddedProps> = ({
                             {...provided.draggableProps}
                             className={styles.tr}
                           >
-                            <span className={styles.td}>{item.order}</span>
-                            <span className={styles.td}>{item.title}</span>
-                            <span className={styles.td}>
+                            <span className={`${styles.td} w-5`}>{item.order}</span>
+                            <span className={`${styles.td} w-20`}>{item.title}</span>
+                            <span className={`${styles.td} w-25`}>
                               {item.description}
                             </span>
-                            <span className={styles.td}>{item.action}</span>
+                            <span className={`${styles.td} w-25`}>{item.action}</span>
                             <span
-                              className={styles.td}
+                              className={`${styles.td} w-20`}
                               style={{ textAlign: "left" }}
                             >
                               <IconButton

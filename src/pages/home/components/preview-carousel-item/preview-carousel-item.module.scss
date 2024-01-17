@@ -40,7 +40,29 @@
 }
 
 .modalHeader {
-    padding-bottom: 15px;
+    padding-bottom: 20px;
+}
+
+.carouselDots {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+
+    .grayDot {
+        width: 9px;
+        height: 9px;
+        border-radius: 100%;
+        background-color: #dfdfdf;
+        margin-right: 5px;
+    }
+
+    .orangeDot {
+        width: 9px;
+        height: 9px;
+        border-radius: 100%;
+        background-color: #FF7222;
+        margin-right: 5px;
+    }
 }
 
 .no_data_state {

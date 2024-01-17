@@ -2,7 +2,7 @@
     align-items: center;
     margin-top: 20px;
 
-    label {
+    .uplaodImage {
         padding-left: 30px;
         background-color: #FF7222;
     }
@@ -10,20 +10,36 @@
 
 .modalHeader {
     padding-bottom: 15px;
-    border-bottom: 1px solid gainsboro;
+    border-bottom: 1px solid #E5E7EB;
 }
-.EditImage {
-    background-color: white;
-    position: absolute;
-    box-shadow: none;
-    color: #5D5D5D;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    border-radius: 100%;
-    top: 37%;
-    right: 40px;
+
+.editImageMain {
+    .editImageIcon {
+        position: absolute;
+        right: 27px;
+        top: -18px;
+        min-width: 27px;
+        max-width: 27px;
+        height: 27px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        border-radius: 100%;
+        padding: 0;
+
+        span {
+            margin: 0;
+
+            svg {
+                width: 15px;
+                height: 15px;
+                color: #5D5D5D;
+            }
+        }
+
+        &:hover {
+            background-color: white;
+        }
+    }
 }

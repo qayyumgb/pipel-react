@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import {
   Button,
-  Checkbox,
   Container,
-  FormControlLabel,
   Grid,
   ThemeProvider,
   Typography,
@@ -11,18 +9,18 @@ import {
 } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
 import AddIcon from '@mui/icons-material/Add';
 import styles from './carousel-list.module.scss';
-import { HeroCard, CardDataJson } from '../../../../interfaces/index';
+import { HeroCard } from '../../../../interfaces/index';
 import { useUploadSomeDataMutation } from '../../../../redux/slices/home';
 import ModalWrapper from '../../../../common/modal';
 import AddCarousalData from '../add-carousel-form/add-carousel-form';
 import CarousalAdded from '../carousel-added-data/carousel-added-data';
 import PreviewCarouselItem from '../preview-carousel-item/preview-carousel-item';
-import PreviewCardDataItem from '../preview-card-data/preview-card-data';
 import flag1 from '../../../../assets/images/isreal.png';
 import flag2 from '../../../../assets/images/usFlag.png';
+import PreviewItem from '../preview-item/preview-item';
 
 const CarouelList: React.FC = () => {
   const [isCarouselFormOpen, setIsCarouselFormOpen] = useState(false);
@@ -35,11 +33,7 @@ const CarouelList: React.FC = () => {
     image: '',
     action: '',
   });
-  const [isCardDataFormOpen, setIsCardDataFormOpen] = useState(false);
-  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
-  const [isCardDataPreview, setIsCardDataPreview] = useState(false);
   const [carousalData, setCarousalData] = useState<HeroCard[]>([]);
-  const [isCardData, setIsCardData] = useState<CardDataJson[]>([]);
   const [checkboxState, setCheckboxState] = useState<{
     [key: string]: boolean;
   }>({});
@@ -52,10 +46,10 @@ const CarouelList: React.FC = () => {
   const [previewCarouselItem, setPreviewCarouselItem] = useState<
     string | null
   >(null);
-  const [cardDataItemToDelete, setCardDataItemToDelete] = useState<
-    string | null
-  >(null);
   const [formMode, setFormMode] = useState('Add');
+  const [isRandomOrderActive, setRandomOrderActive] = useState(false)
+
+
 
   const [uploadSomeData] = useUploadSomeDataMutation();
 
@@ -67,30 +61,6 @@ const CarouelList: React.FC = () => {
       ...prevCheckboxState,
       [updatedData.id]: updatedData.active || false,
     }));
-  };
-
-  const handleEditCardData = (updatedCardData: CardDataJson) => {
-    setIsCardData((prevData) =>
-      prevData.map((item) =>
-        item.id === updatedCardData.id ? updatedCardData : item
-      )
-    );
-    setCheckboxCardDataState((prevCheckboxState) => ({
-      ...prevCheckboxState,
-      [updatedCardData.id]: updatedCardData.active || false,
-    }));
-  };
-
-  const handleAddCardData = (newData: CardDataJson) => {
-    setIsCardData((prevData) => [...prevData, newData]);
-    setCheckboxCardDataState((prevCheckboxState) => ({
-      ...prevCheckboxState,
-      [newData.id]: newData.active || false,
-    }));
-  };
-
-  const cardDataModalHandler = () => {
-    setIsCardDataFormOpen(true);
   };
 
   const handleAddData = (newData: HeroCard) => {
@@ -116,16 +86,8 @@ const CarouelList: React.FC = () => {
     } finally {
       // in case if loader used, stop it here
     }
-  };
 
-  const handlePreview = () => {
-    setIsPreviewVisible((prev) => !prev);
-    setIsCardDataPreview(false);
-  };
-
-  const handleCardDataPreview = () => {
-    setIsCardDataPreview((prev) => !prev);
-    setIsPreviewVisible(false);
+    setRandomOrderActive((prev) => !prev)
   };
 
   const handleDeleteItem = () => {
@@ -150,26 +112,6 @@ const CarouelList: React.FC = () => {
 
   const onPreviewIconClick = (itemId: string) => {
     setPreviewCarouselItem(itemId);
-  };
-
-  const handleCardDeleteItem = () => {
-    if (cardDataItemToDelete) {
-      setIsCardData((prevData) =>
-        prevData.filter((item) => item.id !== cardDataItemToDelete)
-      );
-
-      // Clear the itemToDelete state after deletion
-      setCardDataItemToDelete(null);
-    }
-  };
-
-  const handleOpenCardDataDeleteModal = (itemId: string) => {
-    setCardDataItemToDelete(itemId);
-  };
-
-  // Function to close the delete confirmation modal
-  const handleCloseCardDataDeleteModal = () => {
-    setCardDataItemToDelete(null);
   };
   const [langauage, setLangauage] = useState('HE');
 
@@ -207,6 +149,7 @@ const CarouelList: React.FC = () => {
     setIsCarouselFormOpen(true);
   };
 
+  const isLanguageSelected = (language: string) => langauage === language;
   return (
     <>
       <Container>
@@ -223,11 +166,9 @@ const CarouelList: React.FC = () => {
             <Grid item xs={6} display={'flex'} justifyContent={'end'} gap={1}>
               <Button
                 onClick={checkBoxHandler}
-                className="secondary-btn btn-round"
+                className={`secondary-btn btn-round ${isRandomOrderActive ? 'randomBtn' : ''}`}
                 variant="outlined"
-                startIcon={
-                  <SyncAltIcon style={{ marginLeft: 10, marginRight: 0 }} />
-                }
+                startIcon={<ShuffleIcon style={{ marginLeft: 10, marginRight: 0 }} />}
                 color="success"
               >
                 סדר אקראי
@@ -262,7 +203,7 @@ const CarouelList: React.FC = () => {
           <ThemeProvider theme={customTheme}>
             <Tabs value={0} className={styles.tabWrapper}>
               <Tab
-                className={styles.tabCustom}
+                className={`${styles.tabCustom} ${isLanguageSelected('HE') ? styles.activeTab : ''}`}
                 onClick={() => handleLanguage('HE')}
                 label={
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -273,7 +214,7 @@ const CarouelList: React.FC = () => {
               />
 
               <Tab
-                className={styles.tabCustom}
+                className={`${styles.tabCustom} ${isLanguageSelected('EN') ? styles.activeTab : ''}`}
                 onClick={() => handleLanguage('EN')}
                 label={
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -294,10 +235,20 @@ const CarouelList: React.FC = () => {
               onPreviewCarousel={onPreviewIconClick}
             />
             <ModalWrapper maxWidth='641px' open={Boolean(previewCarouselItem)} onClose={() => setPreviewCarouselItem(null)}>
-              <PreviewCarouselItem carousalData={carousalData} onClose={() => setPreviewCarouselItem(null)} />
-              </ModalWrapper>
+              <PreviewCarouselItem carousalData={carousalData} onClose={() => setPreviewCarouselItem(null)} selectedItemId={previewCarouselItem} />
+              {/* <PreviewItem
+                id={carousalData.find((item) => item.id === previewCarouselItem)?.id || ''}
+                title={carousalData.find((item) => item.id === previewCarouselItem)?.title || ''}
+                description={carousalData.find((item) => item.id === previewCarouselItem)?.description || ''}
+                image={carousalData.find((item) => item.id === previewCarouselItem)?.image || ''}
+                order={carousalData.find((item) => item.id === previewCarouselItem)?.order || 0}
+                action={carousalData.find((item) => item.id === previewCarouselItem)?.action || ''}
+                onClose={() => setPreviewCarouselItem(null)}
+              /> */}
+
+            </ModalWrapper>
             <ModalWrapper
-            maxWidth='437px'
+              maxWidth='437px'
               open={Boolean(carouselItemToDelete)}
               onClose={handleCloseCarouselDeleteModal}
             >

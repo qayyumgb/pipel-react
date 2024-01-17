@@ -4,11 +4,12 @@
 
   .leftMenuWrapper {
     background-color: #ffffff;
-    max-width: 16%;
+    max-width: 260px;
     width: 100%;
   }
+
   .containerWrapper {
-    min-width: 84%;
+    min-width: calc(100% - 260px);
     width: 100%;
   }
 }

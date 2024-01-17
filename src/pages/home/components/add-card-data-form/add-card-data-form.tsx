@@ -64,28 +64,28 @@ const AddPostForm = ({
         <h2 style={{ margin: 0, fontSize: 24, fontWeight: 600 }}>
           {formMode} Item
         </h2>
-        <IconButton onClick={onClose} aria-label="close" style={{padding: '5px', background: '#E5E7EB'}}>
+        <IconButton onClick={onClose} aria-label="close" style={{ padding: '5px', background: '#E5E7EB' }}>
           <CloseIcon />
         </IconButton>
       </Grid>
 
       <div className='formGroup'>
-        <LabelForm labelText="Title" />
+        <LabelForm labelText="כותרת" />
         <InputForm type="text" placehloder='Enter title here' name='title' onChange={handleInputChange} value={formData.title} id='title' />
       </div>
 
       <div className='formGroup'>
-        <LabelForm labelText="Description" />
-        <InputTextarea 
-        name="description"
-        value={formData.description}
-        id="description"
-        placehloder="Enter description here"
-        onChange={handleInputChange} />
+        <LabelForm labelText="טקסט" />
+        <InputTextarea
+          name="description"
+          value={formData.description}
+          id="description"
+          placehloder="Enter description here"
+          onChange={handleInputChange} />
       </div>
 
       <div className='formGroup'>
-        <LabelForm labelText="Button Url" />
+        <LabelForm labelText="כתובת אתר" />
         <InputForm
           name='action'
           value={formData.action}
@@ -96,7 +96,7 @@ const AddPostForm = ({
       </div>
 
       <div className='formGroup'>
-        <LabelForm labelText="Order" />
+        <LabelForm labelText="סדר" />
         <InputForm
           name='order'
           value={formData.order}
