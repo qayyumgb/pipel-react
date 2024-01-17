@@ -1,8 +1,8 @@
-import TopCarousal from "./components/top-carousel/top-carousel"
+import { Outlet } from "react-router-dom";
 
 const MainPage = () => {
     return (
-        <TopCarousal />
+        <Outlet />
     )
 }
 

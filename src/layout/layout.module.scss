@@ -1,0 +1,14 @@
+.mainContainerWrapper {
+  height: 100vh;
+  background: #f7f7f7;
+
+  .leftMenuWrapper {
+    background-color: #ffffff;
+    max-width: 16%;
+    width: 100%;
+  }
+  .containerWrapper {
+    min-width: 84%;
+    width: 100%;
+  }
+}

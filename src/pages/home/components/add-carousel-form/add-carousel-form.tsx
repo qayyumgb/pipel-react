@@ -1,227 +1,195 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-
-import { Button, Checkbox, FormControlLabel, Grid, TextField, styled } from '@mui/material';
-
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  TextField,
+  styled,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 import jsonData from '../../../../constants/topCarousal.json';
 
-
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-
 import { useUploadSomeDataMutation } from '../../../../redux/slices/home';
-import styles from "./add-carousel-form.module.scss";
+import styles from './add-carousel-form.module.scss';
+import LabelForm from '../../../../common/form-label';
+import InputForm from '../../../../common/form-input';
 
+const AddCarousalForm = ({
+  onClose,
+  onAddData,
+  formMode,
+  initialFormObject,
+  onUpdateData,
+}: {
+  onClose: () => void;
+  onAddData: (data: any) => void;
+  onUpdateData: (data: any) => void;
+  formMode: string;
+  initialFormObject: any;
+}) => {
+  const [formData, setFormData] = useState(initialFormObject);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | undefined>(
+    undefined
+  );
 
+  useEffect(() => {
+    if (initialFormObject.image !== '') {
+      setImagePreviewUrl(initialFormObject.image);
+    }
+  }, [initialFormObject]);
+  const [uploadSomeData] = useUploadSomeDataMutation();
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-// -----------------------------------------------------------------------------------------------------------------------
+    if (formMode === 'Add') {
+      const generatedId = Date.now();
+      const newDataItem = { ...formData, id: generatedId };
+      onAddData(newDataItem);
+    } else {
+      onUpdateData(formData);
+    }
+    onClose();
+  };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData: any) => ({ ...prevData, [name]: value }));
+  };
 
-const AddCarousalForm = ({ onClose, onAddData }: { onClose: () => void; onAddData: (data: any) => void }) => {
-    const initialFormData = {
-        title: '',
-        description: '',
-        order: '',
-        active: false,
-        image: '',
-        action: ''
-    };
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setFormData((prevData: any) => ({ ...prevData, [name]: checked }));
+  };
 
-    const [formData, setFormData] = useState(initialFormData);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | undefined>(undefined);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const imageUrl = generateImageUrlOrPath(file);
 
+      if (imageUrl !== undefined) {
+        setFormData((prevData: any) => ({ ...prevData, image: imageUrl }));
+        setImagePreviewUrl(imageUrl);
+      } else {
+        console.error('Failed to generate image URL');
+      }
+    }
+  };
 
-    const [uploadSomeData] = useUploadSomeDataMutation();
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
 
+  return (
+    <form onSubmit={handleSubmit}>
+      <Grid
+        className={styles.modalHeader}
+        item
+        display={'flex'}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+      >
+        <h2 style={{ margin: 0, fontSize: 24, fontWeight: 600 }}>
+          {formMode} Item
+        </h2>
+        <IconButton onClick={onClose} aria-label="close" style={{padding: '5px', background: '#E5E7EB'}}>
+          <CloseIcon />
+        </IconButton>
+      </Grid>
 
+      <Grid
+        container
+        className={styles.uploadBtn}
+        justifyContent="flex-between"
+      >
+        <Grid item>
+          <Button
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+          >
+            <VisuallyHiddenInput type="file" onChange={handleImageChange} />
+          </Button>
+        </Grid>
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        const generatedId = Date.now();
-        const newDataItem = { id: generatedId, ...formData };
-        const newData = [...jsonData, newDataItem];
-
-        console.log(newData);
-        setFormData(initialFormData);
-        const payload = {
-            // create a payload for submitting form
-        }
-
-        try {
-            await uploadSomeData({ payload: payload });
-
-            // show some toast or snackbar message for success
-
-            // Success, so close the modal
-            onClose();
-
-        } catch (error) {
-            console.log('error while adding form data', error);
-        } finally {
-            // incase if loader used, stop it here
-        }
-
-        onAddData(newDataItem);
-        onClose();
-    };
-
-
-
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
-    };
-
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, checked } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: checked }));
-    };
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0];
-            const imageUrl = generateImageUrlOrPath(file);
-
-            if (imageUrl !== undefined) {
-                setFormData((prevData) => ({ ...prevData, image: imageUrl }));
-                setImagePreviewUrl(imageUrl);
-            } else {
-                console.error("Failed to generate image URL");
-            }
-        }
-    };
-
-
-
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-    });
-
-
-
-
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <h2 style={{ marginTop: 0 }}>Add Item</h2>
-
-            <Grid container className={styles.uploadBtn} justifyContent="flex-between">
-                <Grid item xs={4}>
-                    <Button
-                        component="label"
-                        sx={{ marginBottom: 2 }}
-                        variant="contained"
-                        startIcon={<CloudUploadIcon />}
-                    >
-                        <VisuallyHiddenInput type="file" onChange={handleImageChange} />
-                    </Button>
-                </Grid>
-
-                <Grid item xs={8}>
-                    {imagePreviewUrl && (
-                        <img src={imagePreviewUrl} alt='uploaded img preview' style={{ height: '120px', objectFit: 'contain', borderRadius: 6 }} />
-                    )}
-                </Grid>
-            </Grid>
-
-            <TextField
-                sx={{ width: '100%', marginBottom: 2 }}
-                id="outlined-basic"
-                label="Title"
-                variant="outlined"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
+        <Grid item>
+          {imagePreviewUrl && (
+            <img
+              src={imagePreviewUrl}
+              alt="uploaded img preview"
+              style={{
+                height: '120px',
+                objectFit: 'contain',
+                borderRadius: 6,
+              }}
             />
-            <TextField
-                sx={{ width: '100%', marginBottom: 2 }}
-                id="outlined-basic"
-                label="Description"
-                variant="outlined"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-            />
+          )}
+        </Grid>
+      </Grid>
 
-            <TextField
-                sx={{ width: '100%', marginBottom: 2 }}
-                id="outlined-basic"
-                label="Button Url"
-                variant="outlined"
-                name="action"
-                value={formData.action}
-                onChange={handleInputChange}
-                inputProps={{
-                    type: 'url',
-                }}
-            />
+      <div className='formGroup'>
+        <LabelForm labelText="Title" />
+        <InputForm type="text" placehloder='Enter title here' name='title' onChange={handleInputChange} value={formData.title} id='title' />
+      </div>
 
-            <TextField
-                sx={{ width: '100%', marginBottom: 2 }}
-                id="outlined-basic"
-                label="Order"
-                variant="outlined"
-                name="order"
-                value={formData.order}
-                onChange={handleInputChange}
-                inputProps={{
-                    type: 'number',
-                }}
-            />
+      <div className='formGroup'>
+        <LabelForm labelText="Button Url" />
+        <InputForm
+          name='action'
+          value={formData.action}
+          onChange={handleInputChange}
+          type='url'
+          placehloder='Enter button url here'
+          id='action' />
+      </div>
 
-            <FormControlLabel
-                sx={{ marginBottom: 2, width: '100%' }}
-                control={
-                    <Checkbox
-                        checked={formData.active || false}
-                        onChange={handleCheckboxChange}
-                        name="active"
-                    />
-                }
-                label="Active"
-            />
+      <div className='formGroup'>
+        <LabelForm labelText="Order" />
+        <InputForm
+          name='order'
+          value={formData.order}
+          onChange={handleInputChange}
+          type='number'
+          placehloder='Enter order here'
+          id='order' />
+      </div>
 
-            <Button variant="contained" className="primary-btn" type="submit" color="success">
-                Add Data
-            </Button>
-
-            <Button
-                variant="outlined"
-                className="secondary-btn"
-                type="button"
-                sx={{ ml: 2 }}
-                onClick={onClose}
-                color="success"
-            >
-                Close
-            </Button>
-        </form>
-    );
+      <Grid display={'flex'} justifyContent={'center'} className='formGroup'>
+        <Button
+          variant="contained"
+          className="primary-btn btn-round"
+          type="submit"
+          color="success"
+        >
+          {formMode} Data
+        </Button>
+      </Grid>
+    </form>
+  );
 };
 
-
-
-
 function generateImageUrlOrPath(file: File): string | undefined {
-    try {
-        const imageUrl = URL.createObjectURL(file);
-        return imageUrl;
-    } catch (error) {
-        console.error('Failed to generate image URL', error);
-        return undefined;
-    }
+  try {
+    const imageUrl = URL.createObjectURL(file);
+    return imageUrl;
+  } catch (error) {
+    console.error('Failed to generate image URL', error);
+    return undefined;
+  }
 }
 
 export default AddCarousalForm;

@@ -1,55 +1,57 @@
-.editCarousalCard {
-    display: flex;
-    align-items: end;
-    align-items: center;
 
-    .CarousalCardBody {
-        padding: 15px;
-        display: flex;
-        gap: 20px;
-        background: white;
-        border-radius: 6px;
-        margin: 10px 0;
+.tableContainer{
+    padding: 20px 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    position: relative;
+    .Table {
+        display: table;
+        border-collapse: collapse;
         width: 100%;
-        position: relative;
-        overflow: hidden;
-
-        .editCarousalData {
-            position: absolute;
-            right: 0;
-            top: 0;
-            transition: .4s;
-            transform: translateY(-50px);
+        max-width: 100%;
+        margin-bottom: 20px;
+        .thead,.tbody{
+            display: table-row-group;
+        vertical-align: middle;
+        border-color: inherit;
         }
+        
+      .tr {    
+        display: table-row;
+        border-bottom: 1px solid #E5E7EB;
+        
+        .td,.th {
+          display: table-cell;
+          padding: 16px 12px;
+          vertical-align: middle;
 
-        &:hover .editCarousalData {
-            transform: translateY(0px);
-        }
-
-        h5 {
-            margin-top: 0;
-        }
-
-        img {
-            border-radius: 6px;
-            height: 100px;
+          button {
+            width: 35px;
+            height: 35px;
+            border: 1px solid #F3F4F6;
+            border-radius: 4.5px;
+            margin-left: 9px;
+          }
+          .itemImage{
+            width: 51px;
+            height: 51px;
             object-fit: cover;
+            border-radius: 3px;
+          }
         }
-
-        .CarousalCardBtn {
-            width: 100%;
-
-            a {
-                background-color: transparent;
-                border: 2px solid #FF7222;
-                color: #FF7222;
-                border-radius: 20px;
-                height: 35px;
-                box-shadow: none;
-            }
+      }
+      .thead{
+        background: rgb(249 144 80 / 10%);
+        height: 47px;
+        .tr{
+            border: 0;
         }
     }
+    }
 }
+
+
+
 
 .no_data_state {
     display: flex;

@@ -1,8 +1,29 @@
 .uploadBtn {
     align-items: center;
+    margin-top: 20px;
 
     label {
         padding-left: 30px;
         background-color: #FF7222;
     }
+}
+
+.modalHeader {
+    padding-bottom: 15px;
+    border-bottom: 1px solid gainsboro;
+}
+.EditImage {
+    background-color: white;
+    position: absolute;
+    box-shadow: none;
+    color: #5D5D5D;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 100%;
+    top: 37%;
+    right: 40px;
 }

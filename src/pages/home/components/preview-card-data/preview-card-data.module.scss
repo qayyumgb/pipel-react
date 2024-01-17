@@ -1,49 +1,56 @@
-.previewMain {
-    background-color: white;
-    display: block;
-    border-radius: 10px;
-    padding: 20px 30px;
-    margin: 30px 0;
-    box-shadow: 0 0 13px 1px gainsboro;
-
-    .previewContent {
-        height: 100%;
-
-        .previewBody {
-            display: flex;
+.previewContainer {
+    .previewItems {
+        display: flex;
+        justify-content: center;
+        .previewMain {
+            background-color: white;
+            display: block;
+            border-radius: 10px;
+            padding: 20px 30px;
+            margin: 30px 0;
+            box-shadow: 0 0 13px 1px gainsboro;
+            max-width: 377px;
             width: 100%;
-            justify-content: space-between;
-            align-items: center;
-
-            h5 {
-                width: 100%;
-                font-size: 18px;
-                font-weight: 700;
-                margin: 0;
-            }
-
-            .previewBtn {
-                width: auto;
-                margin-left: 15px;
-                display: flex;
-                justify-content: end;
-
-                a {
-                    color: #ff7222;
-                    border: 3px solid #ff7222;
-                    height: 40px;
-                    width: 40px;
+            
+            .previewContent {
+                height: 100%;
+        
+                .previewBody {
                     display: flex;
+                    width: 100%;
+                    justify-content: space-between;
                     align-items: center;
-                    justify-content: center;
-                    border-radius: 100%;
+        
+                    h5 {
+                        width: 100%;
+                        font-size: 18px;
+                        font-weight: 700;
+                        margin: 0;
+                    }
+        
+                    .previewBtn {
+                        width: auto;
+                        display: flex;
+                        justify-content: end;
+        
+                        a {
+                            color: #ff7222;
+                            border: 3px solid #ff7222;
+                            height: 40px;
+                            width: 40px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 100%;
+                        }
+                    }
+                }
+        
+                p {
+                    font-size: 16px;
+                    margin-top: 0;
                 }
             }
-        }
-
-        p {
-            font-size: 16px;
-            margin-top: 0;
         }
     }
 }
