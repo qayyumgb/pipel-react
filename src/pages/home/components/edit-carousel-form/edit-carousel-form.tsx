@@ -1,68 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Button,
-    Checkbox,
-    FormControlLabel,
     Grid,
-    TextField,
+    IconButton,
     styled,
 } from '@mui/material';
-import styles from "./edit-carousel-form.module.scss";
+import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { useUpdateEditDataMutation } from '../../../../redux/slices/home';
-const EditCarousalForm = ({
-    onClose,
-    onEditData,
-    initialData,
-    updateLocalCheckboxState
-}: {
-    onClose: () => void;
-    onEditData: (data: any) => void;
-    initialData: any;
-    updateLocalCheckboxState: (itemId: string, checked: boolean) => void;
-}) => {
-    const [formData, setFormData] = useState(initialData);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | undefined>(
-        initialData.image
-    );
+import {useUploadSomeDataMutation} from '../../../../redux/slices/home';
+import styles from './add-carousel-form.module.scss';
+import LabelForm from '../../../../common/form-label';
+import InputForm from '../../../../common/form-input';
+import {FiEdit} from "react-icons/fi";
 
-    const [updateEditData] = useUpdateEditDataMutation(); // Update the hook based on your actual mutation function
+const EditCarouselForm = ({
+                              onClose,
+                              onAddData,
+                              onUpdateData,
+                              formMode,
+                              initialFormObject,
+                          }: {
+    onClose: () => void;
+    onAddData: (data: any) => void;
+    onUpdateData: (data: any) => void;
+    formMode: string;
+    initialFormObject: any;
+}) => {
+    const [formData, setFormData] = useState(initialFormObject);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | undefined>(
+        initialFormObject.image || undefined
+    ); // Simplified setting initial image preview URL
 
     useEffect(() => {
-        setFormData(initialData);
-        setImagePreviewUrl(initialData.image);
-    }, [initialData]);
+        setImagePreviewUrl(initialFormObject.image || undefined);
+    }, [initialFormObject]);
+
+    const [uploadSomeData] = useUploadSomeDataMutation();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            await updateEditData({ payload: formData });
-
-            // show some toast or snackbar message for success
-
-            // Success, so close the modal
-            onClose();
-        } catch (error) {
-            console.log('error while editing form data', error);
-        } finally {
-            // incase if loader used, stop it here
+        if (formMode === 'Add') {
+            const generatedId = Date.now();
+            const newDataItem = {...formData, id: generatedId};
+            onAddData(newDataItem);
+        } else {
+            onUpdateData(formData);
         }
-
-        onEditData(formData);
         onClose();
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevData: any) => ({ ...prevData, [name]: value }));
-    };
-
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, checked } = e.target;
-        setFormData((prevData: any) => ({ ...prevData, [name]: checked }));
-
-        updateLocalCheckboxState(formData.id, checked);
+        const {name, value} = e.target;
+        setFormData((prevData: any) => ({...prevData, [name]: value}));
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +61,7 @@ const EditCarousalForm = ({
             const imageUrl = generateImageUrlOrPath(file);
 
             if (imageUrl !== undefined) {
-                setFormData((prevData: any) => ({ ...prevData, image: imageUrl }));
+                setFormData((prevData: any) => ({...prevData, image: imageUrl}));
                 setImagePreviewUrl(imageUrl);
             } else {
                 console.error('Failed to generate image URL');
@@ -93,102 +83,115 @@ const EditCarousalForm = ({
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2 style={{ marginTop: 0 }}>Edit Item</h2>
+            <Grid
+                className={styles.modalHeader}
+                item
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'space-between'}
+            >
+                <h2 style={{margin: 0, fontSize: 24, fontWeight: 600}}>
+                    {formMode} Item
+                </h2>
+                <IconButton onClick={onClose} aria-label="close" style={{padding: '5px', background: '#E5E7EB'}}>
+                    <CloseIcon/>
+                </IconButton>
+            </Grid>
 
-            <Grid container className={styles.uploadBtn} justifyContent="flex-between">
-                <Grid xs={4}>
-                    <Button
-                        component="label"
-                        sx={{ marginBottom: 2 }}
-                        variant="contained"
-                        startIcon={<CloudUploadIcon />}
-                    >
-                        <VisuallyHiddenInput type="file" onChange={handleImageChange} />
-                    </Button>
+            <Grid
+                container
+                className={styles.uploadBtn}
+                justifyContent="flex-between"
+            >
+                <Grid item position="relative">
+                    {formMode === 'Add' ? (
+                        <div className={styles.editImageMain}>
+                            <Button
+                                component="label"
+                                variant="contained"
+                                startIcon={<CloudUploadIcon/>}
+                                className={styles.editImageIcon}
+                            >
+                                <VisuallyHiddenInput type="file" onChange={handleImageChange}/>
+                            </Button>
+                        </div>
+                    ) : (
+                        <div className={styles.editImageMain}>
+                            <Button
+                                component="label"
+                                startIcon={<FiEdit/>}
+                                className={styles.editImageIcon}
+                            >
+                                <VisuallyHiddenInput type="file" onChange={handleImageChange}/>
+                            </Button>
+                        </div>
+                    )}
                 </Grid>
 
-                <Grid xs={8}>
-                    {imagePreviewUrl && (
+                <Grid item>
+                    {imagePreviewUrl ? (
                         <img
                             src={imagePreviewUrl}
                             alt="uploaded img preview"
-                            style={{ height: '120px', objectFit: 'contain', borderRadius: 6 }}
+                            style={{
+                                height: '84px',
+                                width: '84px',
+                                objectFit: 'cover',
+                                borderRadius: 6,
+                            }}
                         />
+                    ) : (
+                        <div
+                            style={{
+                                height: '84px',
+                                width: '84px',
+                                border: '1px solid #ccc',
+                                borderRadius: 6,
+                            }}
+                        >
+                        </div>
                     )}
                 </Grid>
             </Grid>
 
-            <TextField
-                sx={{ width: '100%', marginBottom: 2 }}
-                id="outlined-basic"
-                label="Title"
-                variant="outlined"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-            />
-            <TextField
-                sx={{ width: '100%', marginBottom: 2 }}
-                id="outlined-basic"
-                label="Description"
-                variant="outlined"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-            />
+            <div className='formGroup'>
+                <LabelForm labelText="כותרת"/>
+                <InputForm type="text" placehloder='Enter title here' name='title' onChange={handleInputChange}
+                           value={formData.title} id='title'/>
+            </div>
 
-            <TextField
-                sx={{ width: '100%', marginBottom: 2 }}
-                id="outlined-basic"
-                label="Button Url"
-                variant="outlined"
-                name="action"
-                value={formData.action}
-                onChange={handleInputChange}
-                inputProps={{
-                    type: 'url',
-                }}
-            />
+            <div className='formGroup'>
+                <LabelForm labelText="כתובת אתר"/>
+                <InputForm
+                    name='action'
+                    value={formData.action}
+                    onChange={handleInputChange}
+                    type='url'
+                    placehloder='Enter button url here'
+                    id='action'/>
+            </div>
 
-            <TextField
-                sx={{ width: '100%', marginBottom: 2 }}
-                id="outlined-basic"
-                label="Order"
-                variant="outlined"
-                name="order"
-                value={formData.order}
-                onChange={handleInputChange}
-                inputProps={{
-                    type: 'number',
-                }}
-            />
+            <div className='formGroup'>
+                <LabelForm labelText="סדר"/>
+                <InputForm
+                    name='order'
+                    value={formData.order}
+                    onChange={handleInputChange}
+                    type='number'
+                    placehloder='Enter order here'
+                    id='order'/>
+            </div>
 
-            <FormControlLabel
-                sx={{ marginBottom: 2, width: '100%' }}
-                control={
-                    <Checkbox
-                        checked={formData.active || false}
-                        onChange={handleCheckboxChange}
-                        name="active"
-                    />
-                }
-                label="Active"
-            />
-
-            <Button variant="contained" className="primary-btn" type="submit" color="success">
-                Update Data
-            </Button>
-
-            <Button
-                variant="outlined"
-                className="secondary-btn"
-                type="button"
-                sx={{ ml: 2 }}
-                onClick={onClose}
-                color="success"
-            >
-                Close
-            </Button>
+            <Grid display={'flex'} justifyContent={'center'} className='formGroup'>
+                <Button
+                    variant="contained"
+                    className="primary-btn btn-round"
+                    type="submit"
+                    color="success"
+                >
+                    {formMode} Data
+                </Button>
+            </Grid>
         </form>
     );
 };
@@ -203,4 +206,4 @@ function generateImageUrlOrPath(file: File): string | undefined {
     }
 }
 
-export default EditCarousalForm;
+export default EditCarouselForm;
