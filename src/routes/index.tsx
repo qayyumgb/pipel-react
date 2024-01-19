@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 /******** Layouts ********/
 import AppLayout from "../layout"
@@ -10,29 +10,29 @@ import HomePage from "../pages/home";
 
 // 404
 import NotFoundPage from "../pages/404";
-import CarouelList from "../pages/home/components/carousel-list/carouel-list";
 import PostList from "../pages/home/components/post-list/post-list";
+import {Carousel} from "../pages/carousel/carousel";
 
 
 export const AppRoutes = [
 
-    { path: "/", element: <Navigate to="home/carousel" /> },
+    {path: "/", element: <Navigate to="home/carousel"/>},
 
     {
         path: "/",
-        element: <AppLayout />,
+        element: <AppLayout/>,
         children: [
             {
                 path: "home",
-                element: <HomePage />,
+                element: <HomePage/>,
                 children: [
                     {
                         path: "carousel",
-                        element: <CarouelList />
+                        element: <Carousel/>
                     },
                     {
                         path: "post",
-                        element: <PostList />
+                        element: <PostList/>
                     }
                 ]
             },
@@ -40,5 +40,5 @@ export const AppRoutes = [
         ]
     },
 
-    { path: "*", element: <NotFoundPage /> },
+    {path: "*", element: <NotFoundPage/>},
 ]

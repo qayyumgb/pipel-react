@@ -1,0 +1,47 @@
+
+.thead, .tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+
+.td {
+  background-color: #fff;
+}
+
+.tr {
+  display: flex;
+  border-bottom: 1px solid #E5E7EB;
+
+  .td, .th {
+    display: table-cell;
+    padding: 16px 12px;
+    vertical-align: middle;
+
+    button {
+      width: 35px;
+      height: 35px;
+      border: 1px solid #F3F4F6;
+      border-radius: 4.5px;
+      margin-left: 9px;
+    }
+
+    .itemImage {
+      width: 51px;
+      height: 51px;
+      object-fit: cover;
+      border-radius: 3px;
+    }
+  }
+}
+
+.thead {
+  background: rgb(249 144 80 / 10%);
+  height: 47px;
+
+  .tr {
+    border: 0;
+  }
+}
+
+
