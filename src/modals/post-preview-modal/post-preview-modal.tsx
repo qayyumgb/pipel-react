@@ -3,22 +3,19 @@ import { Button, Grid, IconButton } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
 import CloseIcon from "@mui/icons-material/Close";
-import styles from "./preview-item.module.scss";
+import styles from "./post-preview.module.scss";
 
-interface CommonPreviewItemProps {
+interface postPreviewModalProps {
   id: string;
   title: string;
   action: string;
   order: number;
-}
-
-interface PreviewItemProps extends CommonPreviewItemProps {
   onClose: () => void;
   description?: string;
   image?: string;
 }
 
-const PreviewItem: React.FC<PreviewItemProps> = ({
+export const PostPreviewModal: React.FC<postPreviewModalProps> = ({
   id,
   title,
   action,
@@ -87,5 +84,3 @@ const PreviewItem: React.FC<PreviewItemProps> = ({
     </>
   );
 };
-
-export default PreviewItem;

@@ -1,26 +1,26 @@
-import {
-  Container,
-  Grid,
-} from "@mui/material";
-import { ReactElement, useState } from "react";
+import { Container, Grid } from "@mui/material";
+import { ReactElement, useState, FC } from "react";
 import { HeroCard } from "../../interfaces";
 import { AddItemModal } from "../../modals/add-item-modal/add-item-modal";
-import PreviewCarouselItem from "../home/components/preview-carousel-item/preview-carousel-item";
-import CarouselList from "./carousel-list/carousel-list";
-import styles from "./carousel.module.scss";
-import { DUMMY_CAROUSEL_DATA } from "./data";
-import { useCarousel } from "./hooks";
 import { Header, MainTabs } from "../../shared";
+import PreviewCarouselItem from "../home/components/preview-carousel-item/preview-carousel-item";
+import { PostPreviewModal } from "../../modals";
+import { DUMMY_POST_DATA } from "./data";
+import { useCarousel } from "./hooks";
+import PostList from "./post-list/post-list";
+import styles from "./post.module.scss";
+import { PostCard } from "../../interfaces/postCard";
 
-export function Carousel(): ReactElement {
-  const [isCarouselFormOpen, setIsCarouselFormOpen] = useState(false);
+interface postProps {}
+
+export const Post: FC<postProps> = () => {
+  const [isAddNew, setIsAddNew] = useState(false);
   const [isPreviewModal, setIsPreviewModal] = useState(false);
-  const [carousalData, setCarousalData] =
-    useState<HeroCard[]>(DUMMY_CAROUSEL_DATA);
+  const [postData, setPostData] = useState<PostCard[]>(DUMMY_POST_DATA);
 
-  const [previewCarouselItem, setPreviewCarouselItem] = useState<string | null>(
-    null,
-  );
+  const [previewCarouselItem, setPreviewCarouselItem] = useState<
+    PostCard | string | null
+  >(null);
   const [isRandomOrderActive, setRandomOrderActive] = useState<boolean>(false);
   const {
     checkBoxHandler,
@@ -29,7 +29,7 @@ export function Carousel(): ReactElement {
     handleAddData,
   } = useCarousel({
     setRandomOrderActive: setRandomOrderActive,
-    setCarousalData: setCarousalData,
+    setCarousalData: setPostData,
     isRandomOrderActive,
   });
 
@@ -39,13 +39,12 @@ export function Carousel(): ReactElement {
 
   const onUpdateIconClick = (item: any) => {
     // setInitialFormObject(item);
-    setIsCarouselFormOpen(true);
+    setIsAddNew(true);
   };
   const onAddButtonClick = () => {
     // setInitialFormObject(INITIAL_FORM_OBJECT);
-    setIsCarouselFormOpen(true);
+    setIsAddNew(true);
   };
-
   return (
     <>
       <Container>
@@ -55,11 +54,10 @@ export function Carousel(): ReactElement {
             onAddButtonClick={onAddButtonClick}
             isRandomOrderActive={isRandomOrderActive}
           />
-
           <MainTabs />
           <Grid>
-            <CarouselList
-              carousalData={carousalData}
+            <PostList
+              postsList={postData}
               onEditData={handleEditData}
               onDeleteItem={handleOpenCarouselDeleteModal}
               onUpdateIconClick={onUpdateIconClick}
@@ -67,26 +65,27 @@ export function Carousel(): ReactElement {
             />
 
             {isPreviewModal && (
-              <PreviewCarouselItem
-                carousalData={carousalData}
+              <PostPreviewModal
+                id={""} //passed selected item id
+                title={""} //passed selected item title
+                action={""} //passed selected item action
+                order={0} //passed selected item order
                 onClose={() => {
                   setIsPreviewModal(false);
                   setPreviewCarouselItem(null);
                 }}
-                selectedItemId={previewCarouselItem}
-                isShow={isPreviewModal}
               />
             )}
           </Grid>
         </Grid>
       </Container>
-      {isCarouselFormOpen && (
+      {isAddNew && (
         <AddItemModal
-          isOpen={isCarouselFormOpen}
-          closeModal={() => setIsCarouselFormOpen(false)}
+          isOpen={isAddNew}
+          closeModal={() => setIsAddNew(false)}
           onSubmit={handleAddData}
         />
       )}
     </>
   );
-}
+};

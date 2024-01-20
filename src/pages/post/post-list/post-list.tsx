@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from "react";
-import styles from "./carousel-list.module.scss";
+import styles from "./post-list.module.scss";
 import { HeroCard } from "../../../interfaces/heroCard";
-import { useUpdateInnerActiveMutation } from "../../../redux/slices/home";
-import emptyState from "../../../assets/images/emptyState.svg";
+import { NoData } from "../../../shared";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { Grid } from "@mui/material";
 import { DraggableItem } from "../../../shared/dragabble-item/dragabble-item";
-import { NoData } from "../../../shared";
+import { PostCard } from "../../../interfaces/postCard";
 
 interface CarousalAddedProps {
-  carousalData: HeroCard[];
+  postsList: PostCard[];
   onEditData: (updatedData: HeroCard) => void;
   onDeleteItem: (itemId: string) => void;
   onUpdateIconClick: (item: any) => void;
   onPreviewCarousel: (itemId: string) => void;
 }
-
-const CarouselList: React.FC<CarousalAddedProps> = ({
-  carousalData,
+const PostList: React.FC<CarousalAddedProps> = ({
+  postsList,
   onUpdateIconClick,
   onPreviewCarousel,
 }) => {
-  const [items, setItems] = useState<HeroCard[]>(carousalData);
+  const [items, setItems] = useState<PostCard[]>(postsList);
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) {
@@ -38,17 +36,17 @@ const CarouselList: React.FC<CarousalAddedProps> = ({
   };
 
   useEffect(() => {
-    setItems([...carousalData].sort((a, b) => a.order - b.order));
-  }, [carousalData]);
+    setItems([...postsList].sort((a, b) => a.order - b.order));
+  }, [postsList]);
 
-  const handleSubmit = (item: HeroCard[]) => {
+  const handleSubmit = (item: PostCard[]) => {
     console.log(`Save data for item with ID: ${item}`);
   };
 
   return (
     <>
       <Grid item xs={12} className={styles.tableContainer}>
-        {carousalData.length > 0 ? (
+        {postsList.length > 0 ? (
           <>
             <form onSubmit={() => handleSubmit(items)}>
               <DragDropContext onDragEnd={handleDragEnd}>
@@ -65,14 +63,13 @@ const CarouselList: React.FC<CarousalAddedProps> = ({
                         </div>
                       </div>
 
-                      {carousalData.map((item: HeroCard, index: number) => (
-                        <DraggableItem<HeroCard> // Specify the type here
+                      {postsList.map((item: PostCard, index: number) => (
+                        <DraggableItem<PostCard> // Specify the type here
                           key={item.id}
                           item={item}
                           index={index}
                           onUpdateIconClick={onUpdateIconClick}
                           onPreviewCarousel={onPreviewCarousel}
-                          // handleDeleteButtonClick={handleDeleteButtonClick}
                         />
                       ))}
                       {provided.placeholder}
@@ -91,4 +88,4 @@ const CarouselList: React.FC<CarousalAddedProps> = ({
   );
 };
 
-export default CarouselList;
+export default PostList;

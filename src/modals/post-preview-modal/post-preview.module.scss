@@ -1,0 +1,133 @@
+.previewMain {
+  display: block;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 300px;
+  padding: 20px 35px;
+
+  .previewContent {
+    display: flex;
+    align-items: end;
+    height: 100%;
+
+    .previewBody {
+      display: flex;
+      width: 100%;
+      align-items: center;
+
+      h5 {
+        width: 100%;
+        text-align: right;
+        color: white;
+        font-size: 20px;
+        font-weight: 500;
+        margin: 0;
+      }
+
+      .previewBtn {
+        width: auto;
+
+        .previewButton {
+          background-color: #ff7222;
+          border-radius: 100%;
+          color: white;
+          padding: 20px;
+        }
+      }
+    }
+  }
+}
+
+.previewContainer {
+  .previewItems {
+    display: flex;
+    justify-content: center;
+
+    .previewMain {
+      background-color: white;
+      display: block;
+      border-radius: 10px;
+      padding: 20px 30px;
+      margin: 30px 0;
+      box-shadow: 0 0 13px 1px gainsboro;
+      max-width: 377px;
+      width: 100%;
+
+      .previewContent {
+        height: 100%;
+
+        .previewBody {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          align-items: center;
+
+          h5 {
+            width: 100%;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+          }
+
+          .previewBtn {
+            width: auto;
+            display: flex;
+            justify-content: end;
+
+            a {
+              color: #ff7222;
+              border: 3px solid #ff7222;
+              height: 40px;
+              width: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 100%;
+            }
+          }
+        }
+
+        p {
+          font-size: 16px;
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+.modalHeader {
+  padding-bottom: 20px;
+}
+
+.carouselDots {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+
+  .grayDot {
+    width: 9px;
+    height: 9px;
+    border-radius: 100%;
+    background-color: #dfdfdf;
+    margin-right: 5px;
+  }
+
+  .orangeDot {
+    width: 9px;
+    height: 9px;
+    border-radius: 100%;
+    background-color: #ff7222;
+    margin-right: 5px;
+  }
+}
+
+.no_data_state {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  opacity: 0.6;
+}

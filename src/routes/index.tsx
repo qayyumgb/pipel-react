@@ -10,8 +10,8 @@ import HomePage from "../pages/home";
 
 // 404
 import NotFoundPage from "../pages/404";
-import PostList from "../pages/home/components/post-list/post-list";
 import {Carousel} from "../pages/carousel/carousel";
+import { Post } from "../pages/post/post";
 
 
 export const AppRoutes = [
@@ -32,7 +32,7 @@ export const AppRoutes = [
                     },
                     {
                         path: "post",
-                        element: <PostList/>
+                        element: <Post/>
                     }
                 ]
             },
