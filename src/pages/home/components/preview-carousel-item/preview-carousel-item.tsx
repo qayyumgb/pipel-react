@@ -5,26 +5,28 @@ import WestIcon from "@mui/icons-material/West";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./preview-carousel-item.module.scss";
 import { HeroCard } from "../../../../interfaces/heroCard";
+import ModalWrapper from "../../../../common/modal";
 
 interface CarousalAddedProps {
+  isShow: boolean;
   carousalData: HeroCard[];
   selectedItemId: string | null;
   onClose: () => void;
 }
 
 const PreviewCarouselItem: React.FC<CarousalAddedProps> = ({
+  isShow,
   carousalData,
   selectedItemId,
   onClose,
 }) => {
-
   const selectedItem = carousalData.find((item) => item.id === selectedItemId);
 
   return (
-    <>
+    <ModalWrapper maxWidth="641px" open={isShow} onClose={onClose}>
       <Grid container justifyContent="center">
         {selectedItem && (
-          <div style={{ width: '100%' }}>
+          <div style={{ width: "100%" }}>
             {/* Modal Header */}
             <Grid
               className={styles.modalHeader}
@@ -49,7 +51,10 @@ const PreviewCarouselItem: React.FC<CarousalAddedProps> = ({
             {/* Main Preview Content */}
             <div
               className={styles.previewMain}
-              style={{ backgroundImage: `url(${selectedItem.image})`, height: '360px' }}
+              style={{
+                backgroundImage: `url(${selectedItem.image})`,
+                height: "360px",
+              }}
             >
               <div className={styles.previewContent}>
                 <div className={styles.previewBody}>
@@ -80,7 +85,7 @@ const PreviewCarouselItem: React.FC<CarousalAddedProps> = ({
           </div>
         )}
       </Grid>
-    </>
+    </ModalWrapper>
   );
 };
 
