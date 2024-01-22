@@ -1,19 +1,16 @@
 import {
-  Container,
-  Grid,
   ThemeProvider,
   Typography,
   createTheme,
 } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import { ReactElement, useState } from "react";
+import { useState } from "react";
 import flag1 from "../../assets/images/isreal.png";
 import flag2 from "../../assets/images/usFlag.png";
 import styles from "./main-tab.module.scss";
-interface maintabsProps {}
 
-export const MainTabs: React.FC<maintabsProps> = ({}) => {
+export const MainTabs: React.FC = ({}) => {
   const [langauage, setLangauage] = useState("HE");
   const customTheme = createTheme({
     components: {
@@ -41,7 +38,7 @@ export const MainTabs: React.FC<maintabsProps> = ({}) => {
           }`}
           onClick={() => handleLanguage("HE")}
           label={
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div className={styles.d_vCenter}>
               <Typography variant="body1">עִברִית</Typography>
               <img src={flag1} alt="flag" className={styles.tabIcon} />
             </div>
@@ -54,7 +51,7 @@ export const MainTabs: React.FC<maintabsProps> = ({}) => {
           }`}
           onClick={() => handleLanguage("EN")}
           label={
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div className={styles.d_vCenter}>
               <Typography variant="body1">אנגלית</Typography>
               <img src={flag2} alt="flag" className={styles.tabIcon} />
             </div>

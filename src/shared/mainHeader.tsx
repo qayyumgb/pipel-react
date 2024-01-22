@@ -31,14 +31,14 @@ export const Header: React.FC<HeaderProps> = ({
             isRandomOrderActive ? "randomBtn" : ""
           }`}
           variant="outlined"
-          startIcon={<ShuffleIcon style={{ marginLeft: 10, marginRight: 0 }} />}
+          startIcon={<ShuffleIcon className={styles.tabMargin} />}
           color="success"
         >
           סדר אקראי
         </Button>
         <Button
           variant="contained"
-          startIcon={<AddIcon style={{ marginLeft: 10, marginRight: 0 }} />}
+          startIcon={<AddIcon className={styles.tabMargin} />}
           className="primary-btn btn-round"
           color="success"
           onClick={onAddButtonClick}

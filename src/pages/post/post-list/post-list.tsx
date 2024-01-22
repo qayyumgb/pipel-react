@@ -14,7 +14,7 @@ interface CarousalAddedProps {
   onUpdateIconClick: (item: any) => void;
   onPreviewCarousel: (itemId: string) => void;
 }
-const PostList: React.FC<CarousalAddedProps> = ({
+export const PostList: React.FC<CarousalAddedProps> = ({
   postsList,
   onUpdateIconClick,
   onPreviewCarousel,
@@ -87,5 +87,3 @@ const PostList: React.FC<CarousalAddedProps> = ({
     </>
   );
 };
-
-export default PostList;

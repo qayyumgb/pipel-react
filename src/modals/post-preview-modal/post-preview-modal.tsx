@@ -4,6 +4,7 @@ import { Link as RouterLink } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./post-preview.module.scss";
+import ModalWrapper from "../../common/modal";
 
 interface postPreviewModalProps {
   id: string;
@@ -11,20 +12,21 @@ interface postPreviewModalProps {
   action: string;
   order: number;
   onClose: () => void;
-  description?: string;
-  image?: string;
+  description: string;
+  isPreViewOpen: boolean;
 }
 
 export const PostPreviewModal: React.FC<postPreviewModalProps> = ({
   id,
   title,
   action,
-  description,
-  image,
+  order,
   onClose,
+  description,
+  isPreViewOpen,
 }) => {
   return (
-    <>
+    <ModalWrapper open={isPreViewOpen} onClose={onClose} maxWidth="437px">
       {id && (
         <Grid container justifyContent="center">
           <div style={{ width: "100%" }}>
@@ -50,37 +52,30 @@ export const PostPreviewModal: React.FC<postPreviewModalProps> = ({
             </Grid>
 
             {/* Main Preview Content */}
-            <div
-              className={styles.previewMain}
-              style={{
-                backgroundImage: image ? `url(${image})` : "none",
-                height: "360px",
-              }}
-            >
-              <div className={styles.previewContent}>
-                <div className={styles.previewBody}>
-                  {/* Display item title */}
-                  <h5>{title}</h5>
 
-                  {/* Description */}
-                  {description && <p>{description}</p>}
+            <div className={styles.previewContent}>
+              <div className={styles.previewBody}>
+                {/* Display item title */}
+                <h5>{title}</h5>
 
-                  {/* Preview Button */}
-                  <div className={styles.previewBtn}>
-                    <Button
-                      className={styles.previewButton}
-                      component={RouterLink}
-                      to={action}
-                    >
-                      <WestIcon />
-                    </Button>
-                  </div>
+                {/* Description */}
+                {description && <p>{description}</p>}
+
+                {/* Preview Button */}
+                <div className={styles.previewBtn}>
+                  <Button
+                    className={styles.previewButton}
+                    component={RouterLink}
+                    to={action}
+                  >
+                    <WestIcon />
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
         </Grid>
       )}
-    </>
+    </ModalWrapper>
   );
 };

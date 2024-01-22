@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./carousel-list.module.scss";
 import { HeroCard } from "../../../interfaces/heroCard";
-import { useUpdateInnerActiveMutation } from "../../../redux/slices/home";
-import emptyState from "../../../assets/images/emptyState.svg";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { Grid } from "@mui/material";
 import { DraggableItem } from "../../../shared/dragabble-item/dragabble-item";
@@ -15,8 +13,7 @@ interface CarousalAddedProps {
   onUpdateIconClick: (item: any) => void;
   onPreviewCarousel: (itemId: string) => void;
 }
-
-const CarouselList: React.FC<CarousalAddedProps> = ({
+export const CarouselList: React.FC<CarousalAddedProps> = ({
   carousalData,
   onUpdateIconClick,
   onPreviewCarousel,
@@ -91,4 +88,3 @@ const CarouselList: React.FC<CarousalAddedProps> = ({
   );
 };
 
-export default CarouselList;

@@ -1,18 +1,15 @@
-import {
-  Container,
-  Grid,
-} from "@mui/material";
-import { ReactElement, useState } from "react";
+import { Container, Grid } from "@mui/material";
+import {useState, FC } from "react";
 import { HeroCard } from "../../interfaces";
 import { AddItemModal } from "../../modals/add-item-modal/add-item-modal";
+import { Header, MainTabs } from "../../shared";
 import PreviewCarouselItem from "../home/components/preview-carousel-item/preview-carousel-item";
-import CarouselList from "./carousel-list/carousel-list";
+import {CarouselList} from "./carousel-list/carousel-list";
 import styles from "./carousel.module.scss";
 import { DUMMY_CAROUSEL_DATA } from "./data";
 import { useCarousel } from "./hooks";
-import { Header, MainTabs } from "../../shared";
 
-export function Carousel(): ReactElement {
+export const Carousel: FC = () => {
   const [isCarouselFormOpen, setIsCarouselFormOpen] = useState(false);
   const [isPreviewModal, setIsPreviewModal] = useState(false);
   const [carousalData, setCarousalData] =
@@ -36,7 +33,6 @@ export function Carousel(): ReactElement {
   const onPreviewIconClick = (itemId: string) => {
     setPreviewCarouselItem(itemId);
   };
-
   const onUpdateIconClick = (item: any) => {
     // setInitialFormObject(item);
     setIsCarouselFormOpen(true);
@@ -45,7 +41,6 @@ export function Carousel(): ReactElement {
     // setInitialFormObject(INITIAL_FORM_OBJECT);
     setIsCarouselFormOpen(true);
   };
-
   return (
     <>
       <Container>
@@ -55,7 +50,6 @@ export function Carousel(): ReactElement {
             onAddButtonClick={onAddButtonClick}
             isRandomOrderActive={isRandomOrderActive}
           />
-
           <MainTabs />
           <Grid>
             <CarouselList
@@ -89,4 +83,4 @@ export function Carousel(): ReactElement {
       )}
     </>
   );
-}
+};
