@@ -1,0 +1,45 @@
+.uploadBtn {
+  align-items: center;
+  margin-top: 20px;
+
+  .uplaodImage {
+    padding-left: 30px;
+    background-color: #ff7222;
+  }
+}
+
+.modalHeader {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.editImageMain {
+  .editImageIcon {
+    position: absolute;
+    right: 27px;
+    top: -18px;
+    min-width: 27px;
+    max-width: 27px;
+    height: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 100%;
+    padding: 0;
+
+    span {
+      margin: 0;
+
+      svg {
+        width: 15px;
+        height: 15px;
+        color: #5d5d5d;
+      }
+    }
+
+    &:hover {
+      background-color: white;
+    }
+  }
+}
