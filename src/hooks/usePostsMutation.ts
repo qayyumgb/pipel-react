@@ -13,10 +13,9 @@ export interface CarouselAddItemData {
 }
 
 interface MutationResponse {
-    // Define the structure of the response data from the mutation
+
 }
 
-type ErrorType = Error; // or a more specific error type
 
 // Mutation function
 const mutateData: MutationFunction<MutationResponse, CarouselAddItemData> = async (data: CarouselAddItemData) => {
@@ -36,19 +35,19 @@ const mutateData: MutationFunction<MutationResponse, CarouselAddItemData> = asyn
 };
 
 // Custom hook
-const usePostsMutation = (): UseMutationResult<MutationResponse, ErrorType, CarouselAddItemData> => {
+const usePostsMutation = (): UseMutationResult<MutationResponse, Error, CarouselAddItemData> => {
     const queryClient = useQueryClient();
-    const { showMessage } = useSnackbar();
+    const {showMessage} = useSnackbar();
 
 
-    return useMutation<MutationResponse, ErrorType, CarouselAddItemData>(mutateData, {
+    return useMutation<MutationResponse, Error, CarouselAddItemData>(mutateData, {
         onSuccess: () => {
             showMessage("פוסט נוסף בהצלחה");
             // Invalidate and refetch queries here
             queryClient.invalidateQueries([GET_ALL_POSTS]);
             // Add more query keys as needed
         },
-        onError: (error: ErrorType) => {
+        onError: (error: Error) => {
             showMessage("שגיאה ביצירת פוסט");
             // Handle error here
             console.error('Mutation error:', error.message);
