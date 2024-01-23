@@ -1,15 +1,17 @@
-import { useRoutes } from "react-router-dom";
+import {useRoutes} from "react-router-dom";
 
 
-import { AppRoutes } from "./routes";
-
+import {AppRoutes} from "./routes";
+import {SnackbarProvider} from "./layout/snackbar/snackbar-context";
 
 
 function App() {
 
-  const pages = useRoutes(AppRoutes);
+    const pages = useRoutes(AppRoutes);
 
-  return <div>{pages}</div>
+    return (<SnackbarProvider>
+        <div>{pages}</div>
+    </SnackbarProvider>)
 }
 
 export default App;
