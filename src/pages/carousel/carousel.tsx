@@ -1,23 +1,38 @@
-import { Container, Grid } from "@mui/material";
-import { useState, FC } from "react";
-import { HeroCard } from "../../interfaces";
-import { AddItemModal } from "../../modals/add-item-modal/add-item-modal";
-import { Header, MainTabs } from "../../shared";
-import PreviewCarouselItem from "../home/components/preview-carousel-item/preview-carousel-item";
-import { CarouselList } from "./carousel-list/carousel-list";
-import styles from "./carousel.module.scss";
-import { DUMMY_CAROUSEL_DATA } from "./data";
-import { useCarousel } from "./hooks";
+import { Container, Grid } from '@mui/material';
+import { useState, FC, useEffect } from 'react';
+import { HeroCard } from '../../interfaces';
+import { AddItemModal } from '../../modals/add-item-modal/add-item-modal';
+import { Header, MainTabs } from '../../shared';
+import PreviewCarouselItem from '../home/components/preview-carousel-item/preview-carousel-item';
+import { CarouselList } from './carousel-list/carousel-list';
+import styles from './carousel.module.scss';
+import { DUMMY_CAROUSEL_DATA, DUMMY_CAROUSEL_DATA_HEBREW } from './data';
+import { useCarousel } from './hooks';
+import { useAppSelector } from '../../redux';
 
 export const Carousel: FC = () => {
+  const currentLanguage = useAppSelector(
+    (state) => state.language.currentLanguage
+  );
   const [isCarouselFormOpen, setIsCarouselFormOpen] = useState(false);
   const [isPreviewModal, setIsPreviewModal] = useState(false);
-  const [carousalData, setCarousalData] = useState<HeroCard[]>(DUMMY_CAROUSEL_DATA);
+  const [carousalData, setCarousalData] =
+    useState<HeroCard[]>(DUMMY_CAROUSEL_DATA);
 
-  const [previewCarouselItem, setPreviewCarouselItem] = useState<string | null>(null);
+  const [previewCarouselItem, setPreviewCarouselItem] = useState<string | null>(
+    null
+  );
   const [isRandomOrderActive, setRandomOrderActive] = useState<boolean>(false);
-  const [editingItem, setEditingItem] = useState<HeroCard | undefined>(undefined);
-
+  const [editingItem, setEditingItem] = useState<HeroCard | undefined>(
+    undefined
+  );
+  useEffect(() => {
+    setCarousalData(
+      currentLanguage === 'EN'
+        ? DUMMY_CAROUSEL_DATA
+        : DUMMY_CAROUSEL_DATA_HEBREW
+    );
+  }, [currentLanguage]);
   const {
     checkBoxHandler,
     handleEditData,
@@ -39,6 +54,9 @@ export const Carousel: FC = () => {
     setIsCarouselFormOpen(true);
   };
 
+  const onDeleteItem = (itemId: string) => {
+    setCarousalData(carousalData.filter((item) => item.id != itemId));
+  };
   const onAddButtonClick = () => {
     setEditingItem(undefined);
     setIsCarouselFormOpen(true);
@@ -52,7 +70,9 @@ export const Carousel: FC = () => {
       };
 
       setCarousalData((prevData) => {
-        const updatedIndex = prevData.findIndex(item => item.id === updatedData.id);
+        const updatedIndex = prevData.findIndex(
+          (item) => item.id === updatedData.id
+        );
         if (updatedIndex !== -1) {
           const newData = [...prevData];
           newData[updatedIndex] = updatedData;
@@ -82,6 +102,7 @@ export const Carousel: FC = () => {
               carousalData={carousalData}
               onUpdateIconClick={onUpdateIconClick}
               onPreviewCarousel={onPreviewIconClick}
+              onDeleteItem={onDeleteItem}
             />
 
             {isPreviewModal && (

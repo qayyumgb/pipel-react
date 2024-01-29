@@ -18,6 +18,7 @@ export const PostList: React.FC<CarousalAddedProps> = ({
   postsList,
   onUpdateIconClick,
   onPreviewCarousel,
+  onDeleteItem,
 }) => {
   const [items, setItems] = useState<PostCard[]>(postsList);
 
@@ -70,6 +71,7 @@ export const PostList: React.FC<CarousalAddedProps> = ({
                           index={index}
                           onUpdateIconClick={onUpdateIconClick}
                           onPreviewCarousel={onPreviewCarousel}
+                          onDeleteItem={onDeleteItem}
                         />
                       ))}
                       {provided.placeholder}

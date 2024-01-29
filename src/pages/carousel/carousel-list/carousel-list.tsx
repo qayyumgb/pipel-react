@@ -10,12 +10,14 @@ interface CarousalAddedProps {
   carousalData: HeroCard[];
   onUpdateIconClick: (item: any) => void;
   onPreviewCarousel: (itemId: string) => void;
+  onDeleteItem: (itemId: string) => void;
 }
 
 export const CarouselList: React.FC<CarousalAddedProps> = ({
   carousalData,
   onUpdateIconClick,
   onPreviewCarousel,
+  onDeleteItem,
 }) => {
   const [items, setItems] = useState<HeroCard[]>([]);
 
@@ -36,7 +38,7 @@ export const CarouselList: React.FC<CarousalAddedProps> = ({
       updatedItems.map((item, index) => ({
         ...item,
         order: index + 1,
-      }))
+      })),
     );
   };
 
@@ -73,6 +75,7 @@ export const CarouselList: React.FC<CarousalAddedProps> = ({
                           index={index}
                           onUpdateIconClick={onUpdateIconClick}
                           onPreviewCarousel={onPreviewCarousel}
+                          onDeleteItem={onDeleteItem}
                         />
                       ))}
                       {provided.placeholder}
