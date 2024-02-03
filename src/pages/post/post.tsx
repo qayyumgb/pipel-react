@@ -1,50 +1,95 @@
 import { Container, Grid } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Header, MainTabs } from "../../shared";
-import { AddEditPostModal, PostPreviewModal } from "../../modals";
-import { useCarousel } from "./hooks";
+import { AddPostItem } from "../../modals";
+import PreviewPostlItem from "../../modals/post-preview-modal/post-preview-modal";
+import { usePost } from "./hooks";
 import { PostList } from "./post-list/post-list";
 import styles from "./post.module.scss";
 import { PostCard } from "../../interfaces/postCard";
 import { useFetchData } from "../../hooks/useFetchData";
 import { GET_ALL_POSTS } from "../../endpoints/endpoints";
 import { useSnackbar } from "../../layout/snackbar/snackbar-context";
+import { DUMMY_POST_DATA, DUMMY_POST_DATA_HEBREW } from "./data";
+import { useAppSelector } from "../../redux";
 
 export const Post: FC = () => {
   const [isAddNew, setIsAddNew] = useState(false);
   const [isPreviewModal, setIsPreviewModal] = useState(false);
   const { data, isLoading } = useFetchData<PostCard[]>(GET_ALL_POSTS);
-  const [postData, setPostData] = useState<PostCard[]>(data ?? []);
+  const [postData, setPostData] = useState<PostCard[]>(DUMMY_POST_DATA);
+  const [editingItem, setEditingItem] = useState<PostCard | undefined>(
+    undefined,
+  );
 
-  const [previewCarouselItem, setPreviewCarouselItem] = useState<
+  const [previewPostlItem, setPreviewPostItem] = useState<
     PostCard | string | null
   >(null);
   const [isRandomOrderActive, setRandomOrderActive] = useState<boolean>(false);
-  const { checkBoxHandler, handleEditData, handleOpenCarouselDeleteModal } =
-    useCarousel({
-      setRandomOrderActive: setRandomOrderActive,
-      setCarousalData: setPostData,
-      isRandomOrderActive,
-    });
+  const currentLanguage = useAppSelector(
+    (state) => state.language.currentLanguage,
+  );
+  const {
+    checkBoxHandler,
+    handleEditData,
+    handleOpenCarouselDeleteModal,
+    handleAddData,
+  } = usePost({
+    setRandomOrderActive: setRandomOrderActive,
+    setPostData: setPostData,
+    isRandomOrderActive,
+  });
+
+
+  useEffect(() => {
+    setPostData(
+      currentLanguage == "EN" ? DUMMY_POST_DATA : DUMMY_POST_DATA_HEBREW,
+    );
+  }, [currentLanguage]);
 
   const onPreviewIconClick = (itemId: string) => {
-    setPreviewCarouselItem(itemId);
+    setPreviewPostItem(itemId);
+    setIsPreviewModal(true);
   };
 
-  const onUpdateIconClick = (item: any) => {
-    // setInitialFormObject(item);
+  const onUpdateIconClick = (item: PostCard) => {
+    setEditingItem(item);
     setIsAddNew(true);
   };
   const onAddButtonClick = () => {
-    // setInitialFormObject(INITIAL_FORM_OBJECT);
+    setEditingItem(undefined);
     setIsAddNew(true);
   };
 
-  const handleAddData = (data: PostCard) => {
-    console.log("====================================");
-    console.log({ data });
-    console.log("====================================");
+  const onDeleteItem = (itemId: string) => {
+    setPostData(postData.filter((item) => item.id != itemId));
   };
+
+  const handleSubmission = (formData: PostCard) => {
+    if (editingItem) {
+      const updatedData: PostCard = {
+        ...editingItem,
+        ...formData,
+      };
+
+      setPostData((prevData) => {
+        const updatedIndex = prevData.findIndex(
+          (item) => item.id === updatedData.id
+        );
+        if (updatedIndex !== -1) {
+          const newData = [...prevData];
+          newData[updatedIndex] = updatedData;
+          return newData;
+        }
+        return prevData;
+      });
+    } else {
+      handleAddData(formData);
+    }
+    setIsAddNew(false);
+    setEditingItem(undefined);
+  };
+
   return (
     <>
       <Container>
@@ -57,35 +102,37 @@ export const Post: FC = () => {
           <MainTabs />
           <Grid>
             <PostList
-              postsList={data ?? []}
-              onEditData={handleEditData}
-              onDeleteItem={handleOpenCarouselDeleteModal}
+              postData={postData}
+              onDeleteItem={onDeleteItem}
               onUpdateIconClick={onUpdateIconClick}
               onPreviewCarousel={onPreviewIconClick}
             />
 
             {isPreviewModal && (
-              <PostPreviewModal
-                id={""} //passed selected item id
-                title={""} //passed selected item title
-                action={""} //passed selected item action
-                order={0} //passed selected item order
+              <PreviewPostlItem
+                postData={postData}
                 onClose={() => {
                   setIsPreviewModal(false);
-                  setPreviewCarouselItem(null);
+                  setPreviewPostItem(null);
                 }}
-                description={""}
-                isPreViewOpen={isPreviewModal}
+                selectedItemId={previewPostlItem}
+                isShow={isPreviewModal}
               />
             )}
           </Grid>
         </Grid>
       </Container>
       {isAddNew && (
-        <AddEditPostModal
-          isOpen={isAddNew}
-          closeModal={() => setIsAddNew(false)}
-          onSubmit={handleAddData}
+        <AddPostItem
+          isOpen={true}
+          closeModal={() => {
+            setIsAddNew(false);
+            setEditingItem(undefined);
+          }}
+          onSubmit={handleSubmission}
+          editMode={!!editingItem}
+          initialData={editingItem}
+          updatePostData={handleEditData}
         />
       )}
     </>
