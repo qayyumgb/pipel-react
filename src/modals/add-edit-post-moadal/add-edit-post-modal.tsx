@@ -30,9 +30,7 @@ interface AddEditPostModalProps {
 
 export const AddEditPostModal: FC<AddEditPostModalProps> = (props) => {
   const { isOpen, closeModal, onSubmit, editingItem, isEdit } = props;
-  const [formData, setFormData] = useState(editingItem || INITIAL_FORM_OBJECT);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState<string>();
-  const { mutate, isLoading, isError, data, error } = usePostsMutation();
+  const [formData, setFormData] = useState((isEdit?editingItem:INITIAL_FORM_OBJECT) ||editingItem || INITIAL_FORM_OBJECT);
 
   const isEditMode = Boolean(isEdit);
 

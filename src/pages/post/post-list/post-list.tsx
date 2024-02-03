@@ -23,23 +23,26 @@ export const PostList: React.FC<CarousalAddedProps> = ({
 }) => {
   const [items, setItems] = useState<PostCard[]>(postsList);
 
+  useEffect(() => {
+    setItems([...postsList].sort((a, b) => a.order - b.order));
+  }, [postsList]);
   const handleDragEnd = (result: any) => {
     if (!result.destination) {
       return;
     }
+
     const updatedItems = Array.from(items);
     const [reorderedItem] = updatedItems.splice(result.source.index, 1);
     updatedItems.splice(result.destination.index, 0, reorderedItem);
-    const updatedFormData = updatedItems.map((item, index) => ({
-      ...item,
-      order: index + 1,
-    }));
-    setItems(updatedFormData);
+
+    setItems((prevItems) =>
+      updatedItems.map((item, index) => ({
+        ...item,
+        order: index + 1,
+      })),
+    );
   };
 
-  useEffect(() => {
-    setItems([...postsList].sort((a, b) => a.order - b.order));
-  }, [postsList]);
 
   const handleSubmit = (items: PostCard[]) => {
     onEditData(items, false, true);
@@ -65,7 +68,7 @@ export const PostList: React.FC<CarousalAddedProps> = ({
                         </div>
                       </div>
 
-                      {postsList.map((item: PostCard, index: number) => (
+                      {items.map((item: PostCard, index: number) => (
                         <DraggableItem<PostCard> // Specify the type here
                           key={item.id}
                           item={item}
