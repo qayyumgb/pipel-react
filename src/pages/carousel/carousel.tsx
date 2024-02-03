@@ -97,7 +97,7 @@ export const Carousel: FC = () => {
             isRandomOrderActive={isRandomOrderActive}
           />
           <MainTabs />
-          <Grid>
+          <Grid className={styles.mainScroll}>
             <CarouselList
               carousalData={carousalData}
               onUpdateIconClick={onUpdateIconClick}

@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./post-list.module.scss";
-import { HeroCard } from "../../../interfaces/heroCard";
 import { NoData } from "../../../shared";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { Grid } from "@mui/material";
 import { DraggableItem } from "../../../shared/dragabble-item/dragabble-item";
 import { PostCard } from "../../../interfaces/postCard";
+import { CarousalAddedProps } from "./post-list";
 
-export interface CarousalAddedProps {
-  postsList: PostCard[];
-  onEditData: (val: PostCard[], isAddNew: boolean, isEdit: boolean) => void;
-  onDeleteItem: (itemId: string) => void;
-  onUpdateIconClick: (item: any) => void;
-  onPreviewCarousel: (itemId: string) => void;
-}
 export const PostList: React.FC<CarousalAddedProps> = ({
   postsList,
   onUpdateIconClick,
@@ -42,7 +35,7 @@ export const PostList: React.FC<CarousalAddedProps> = ({
   }, [postsList]);
 
   const handleSubmit = (items: PostCard[]) => {
-    onEditData(items, false, true);
+    onEditData(items, true, true);
   };
 
   return (
@@ -66,7 +59,7 @@ export const PostList: React.FC<CarousalAddedProps> = ({
                       </div>
 
                       {postsList.map((item: PostCard, index: number) => (
-                        <DraggableItem<PostCard> // Specify the type here
+                        <DraggableItem<PostCard>
                           key={item.id}
                           item={item}
                           index={index}

@@ -1,4 +1,4 @@
-import { HeroCard } from "../../../interfaces";
+import { HeroCard, PostCard } from "../../../interfaces";
 import { useUploadSomeDataMutation } from "../../../redux/slices/home";
 
 // Define the type for the custom hook's props (if any)
@@ -12,9 +12,8 @@ interface UseCarouselProps {
 // Define the return type of the custom hook
 interface UseCarouselReturn {
   handleEditData: (updatedData: HeroCard) => void;
-  handleAddData: (newData: HeroCard) => void;
+  handleAddData: (newData: PostCard) => void;
   checkBoxHandler: () => void;
-  handleOpenCarouselDeleteModal: (itemId: string) => void;
 }
 
 // Define the custom hook function
@@ -30,7 +29,7 @@ export const useCarousel = (props: UseCarouselProps): UseCarouselReturn => {
     );
   };
 
-  const handleAddData = (newData: HeroCard) => {
+  const handleAddData = (newData: PostCard) => {
     console.log({ newData });
     setCarousalData((prevData: HeroCard[]) => [...prevData, newData]);
   };
@@ -54,15 +53,10 @@ export const useCarousel = (props: UseCarouselProps): UseCarouselReturn => {
     setRandomOrderActive(!isRandomOrderActive);
   };
 
-  const handleOpenCarouselDeleteModal = (itemId: string) => {
-    // setIsDeleteModalOpen(true);
-  };
-
   // Return the values or functions you want to expose
   return {
     handleEditData,
     handleAddData,
     checkBoxHandler,
-    handleOpenCarouselDeleteModal,
   };
 };

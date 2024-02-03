@@ -2,3 +2,7 @@
     margin-left: 10px;
     margin-right: 0;
 }
+.mainScroll{
+    max-height: calc(100vh - 254px);
+    overflow: auto;
+}
