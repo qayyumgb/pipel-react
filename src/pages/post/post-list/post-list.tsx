@@ -1,52 +1,58 @@
+// PostList.tsx
+
 import React, { useEffect, useState } from "react";
 import styles from "./post-list.module.scss";
-import { HeroCard } from "../../../interfaces/heroCard";
 import { NoData } from "../../../shared";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { Grid } from "@mui/material";
 import { DraggableItem } from "../../../shared/dragabble-item/dragabble-item";
 import { PostCard } from "../../../interfaces/postCard";
 
-interface CarousalAddedProps {
-  postsList: PostCard[];
-  onEditData: (updatedData: HeroCard) => void;
-  onDeleteItem: (itemId: string) => void;
+export interface PostAddedProps {
+  postData: PostCard[];
   onUpdateIconClick: (item: any) => void;
   onPreviewCarousel: (itemId: string) => void;
+  onDeleteItem: (itemId: string) => void;
 }
-export const PostList: React.FC<CarousalAddedProps> = ({
-  postsList,
+
+export const PostList: React.FC<PostAddedProps> = ({
+  postData,
   onUpdateIconClick,
   onPreviewCarousel,
+  onDeleteItem
 }) => {
-  const [items, setItems] = useState<PostCard[]>(postsList);
+  const [items, setItems] = useState<PostCard[]>(postData);
+
+  useEffect(() => {
+    setItems([...postData].sort((a, b) => a.order - b.order));
+  }, [postData]);
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) {
       return;
     }
+
     const updatedItems = Array.from(items);
     const [reorderedItem] = updatedItems.splice(result.source.index, 1);
     updatedItems.splice(result.destination.index, 0, reorderedItem);
-    const updatedFormData = updatedItems.map((item, index) => ({
-      ...item,
-      order: index + 1,
-    }));
-    setItems(updatedFormData);
+
+    setItems((prevItems) =>
+      updatedItems.map((item, index) => ({
+        ...item,
+        order: index + 1,
+      })),
+    );
   };
 
-  useEffect(() => {
-    setItems([...postsList].sort((a, b) => a.order - b.order));
-  }, [postsList]);
-
-  const handleSubmit = (item: PostCard[]) => {
-    console.log(`Save data for item with ID: ${item}`);
+  const handleSubmit = (updatedItems: PostCard[]) => {
+    console.log("Save data for items: ", updatedItems);
   };
+  console.log("Render PostList:", items);
 
   return (
     <>
       <Grid item xs={12} className={styles.tableContainer}>
-        {postsList.length > 0 ? (
+        {items.length > 0 ? (
           <>
             <form onSubmit={() => handleSubmit(items)}>
               <DragDropContext onDragEnd={handleDragEnd}>
@@ -63,13 +69,14 @@ export const PostList: React.FC<CarousalAddedProps> = ({
                         </div>
                       </div>
 
-                      {postsList.map((item: PostCard, index: number) => (
-                        <DraggableItem<PostCard> // Specify the type here
+                      {items.map((item: PostCard, index: number) => (
+                        <DraggableItem<PostCard>
                           key={item.id}
                           item={item}
                           index={index}
                           onUpdateIconClick={onUpdateIconClick}
                           onPreviewCarousel={onPreviewCarousel}
+                          onDeleteItem={onDeleteItem}
                         />
                       ))}
                       {provided.placeholder}

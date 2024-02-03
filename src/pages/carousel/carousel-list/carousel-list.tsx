@@ -8,44 +8,50 @@ import { NoData } from "../../../shared";
 
 interface CarousalAddedProps {
   carousalData: HeroCard[];
-  onEditData: (updatedData: HeroCard) => void;
-  onDeleteItem: (itemId: string) => void;
   onUpdateIconClick: (item: any) => void;
   onPreviewCarousel: (itemId: string) => void;
+  onDeleteItem: (itemId: string) => void;
 }
+
 export const CarouselList: React.FC<CarousalAddedProps> = ({
   carousalData,
   onUpdateIconClick,
   onPreviewCarousel,
+  onDeleteItem,
 }) => {
-  const [items, setItems] = useState<HeroCard[]>(carousalData);
-
-  const handleDragEnd = (result: any) => {
-    if (!result.destination) {
-      return;
-    }
-    const updatedItems = Array.from(items);
-    const [reorderedItem] = updatedItems.splice(result.source.index, 1);
-    updatedItems.splice(result.destination.index, 0, reorderedItem);
-    const updatedFormData = updatedItems.map((item, index) => ({
-      ...item,
-      order: index + 1,
-    }));
-    setItems(updatedFormData);
-  };
+  const [items, setItems] = useState<HeroCard[]>([]);
 
   useEffect(() => {
     setItems([...carousalData].sort((a, b) => a.order - b.order));
   }, [carousalData]);
 
-  const handleSubmit = (item: HeroCard[]) => {
-    console.log(`Save data for item with ID: ${item}`);
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const updatedItems = Array.from(items);
+    const [reorderedItem] = updatedItems.splice(result.source.index, 1);
+    updatedItems.splice(result.destination.index, 0, reorderedItem);
+
+    setItems((prevItems) =>
+      updatedItems.map((item, index) => ({
+        ...item,
+        order: index + 1,
+      })),
+    );
   };
+
+  const handleSubmit = (updatedItems: HeroCard[]) => {
+    console.log("Save data for items: ", updatedItems);
+  };
+
+  console.log("Render CarouselList:", items);
 
   return (
     <>
       <Grid item xs={12} className={styles.tableContainer}>
-        {carousalData.length > 0 ? (
+        {items.length > 0 ? (
           <>
             <form onSubmit={() => handleSubmit(items)}>
               <DragDropContext onDragEnd={handleDragEnd}>
@@ -62,14 +68,14 @@ export const CarouselList: React.FC<CarousalAddedProps> = ({
                         </div>
                       </div>
 
-                      {carousalData.map((item: HeroCard, index: number) => (
-                        <DraggableItem<HeroCard> // Specify the type here
+                      {items.map((item: HeroCard, index: number) => (
+                        <DraggableItem<HeroCard>
                           key={item.id}
                           item={item}
                           index={index}
                           onUpdateIconClick={onUpdateIconClick}
                           onPreviewCarousel={onPreviewCarousel}
-                          // handleDeleteButtonClick={handleDeleteButtonClick}
+                          onDeleteItem={onDeleteItem}
                         />
                       ))}
                       {provided.placeholder}
@@ -87,4 +93,3 @@ export const CarouselList: React.FC<CarousalAddedProps> = ({
     </>
   );
 };
-

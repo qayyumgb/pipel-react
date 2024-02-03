@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     Grid,
@@ -7,11 +7,11 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import {useUploadSomeDataMutation} from '../../../../redux/slices/home';
+import { useUploadSomeDataMutation } from '../../../../redux/slices/home';
 import styles from './add-carousel-form.module.scss';
 import LabelForm from '../../../../common/form-label';
 import InputForm from '../../../../common/form-input';
-import {FiEdit} from "react-icons/fi";
+import { FiEdit } from 'react-icons/fi';
 
 const INITIAL_FORM_OBJECT = {
     id: '',
@@ -22,31 +22,44 @@ const INITIAL_FORM_OBJECT = {
     image: '',
     action: '',
 };
+
 const AddCarousalForm = ({
-                             onClose,
-                             onAddData,
-                         }: {
+    onClose,
+    onAddData,
+    onUpdateData,
+    editMode = false,
+    initialData = {},
+}: {
     onClose: () => void;
     onAddData: (data: any) => void;
-
+    onUpdateData: (data: any) => void;
+    editMode?: boolean;
+    initialData?: any;
 }) => {
-    const [formData, setFormData] = useState(INITIAL_FORM_OBJECT);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string>();
-
+    const [formData, setFormData] = useState(
+        editMode ? initialData : { ...INITIAL_FORM_OBJECT }
+    );
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | undefined>(
+        editMode ? initialData.image : undefined
+    );
 
     const [uploadSomeData] = useUploadSomeDataMutation();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const generatedId = Date.now();
-        const newDataItem = {...formData, id: generatedId};
-        onAddData(newDataItem);
+        if (editMode) {
+            onUpdateData(formData);
+        } else {
+            const generatedId = Date.now();
+            const newDataItem = { ...formData, id: generatedId };
+            onAddData(newDataItem);
+        }
         onClose();
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-        setFormData((prevData: any) => ({...prevData, [name]: value}));
+        const { name, value } = e.target;
+        setFormData((prevData: any) => ({ ...prevData, [name]: value }));
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +68,7 @@ const AddCarousalForm = ({
             const imageUrl = generateImageUrlOrPath(file);
 
             if (imageUrl !== undefined) {
-                setFormData((prevData: any) => ({...prevData, image: imageUrl}));
+                setFormData((prevData: any) => ({ ...prevData, image: imageUrl }));
                 setImagePreviewUrl(imageUrl);
             } else {
                 console.error('Failed to generate image URL');
@@ -75,6 +88,16 @@ const AddCarousalForm = ({
         width: 1,
     });
 
+    function generateImageUrlOrPath(file: File): string | undefined {
+        try {
+            const imageUrl = URL.createObjectURL(file);
+            return imageUrl;
+        } catch (error) {
+            console.error('Failed to generate image URL', error);
+            return undefined;
+        }
+    }
+
     return (
         <form onSubmit={handleSubmit}>
             <Grid
@@ -84,11 +107,15 @@ const AddCarousalForm = ({
                 alignItems={'center'}
                 justifyContent={'space-between'}
             >
-                <h2 style={{margin: 0, fontSize: 24, fontWeight: 600}}>
-                    Add Item
+                <h2 style={{ margin: 0, fontSize: 24, fontWeight: 600 }}>
+                    {editMode ? 'Edit Item' : 'Add Item'}
                 </h2>
-                <IconButton onClick={onClose} aria-label="close" style={{padding: '5px', background: '#E5E7EB'}}>
-                    <CloseIcon/>
+                <IconButton
+                    onClick={onClose}
+                    aria-label="close"
+                    style={{ padding: '5px', background: '#E5E7EB' }}
+                >
+                    <CloseIcon />
                 </IconButton>
             </Grid>
 
@@ -102,10 +129,10 @@ const AddCarousalForm = ({
                         <Button
                             component="label"
                             variant="contained"
-                            startIcon={<CloudUploadIcon/>}
+                            startIcon={<CloudUploadIcon />}
                             className={styles.editImageIcon}
                         >
-                            <VisuallyHiddenInput type="file" onChange={handleImageChange}/>
+                            <VisuallyHiddenInput type="file" onChange={handleImageChange} />
                         </Button>
                     </div>
                 </Grid>
@@ -137,31 +164,31 @@ const AddCarousalForm = ({
             </Grid>
 
             <div className='formGroup'>
-                <LabelForm labelText="כותרת"/>
+                <LabelForm labelText="כותרת" />
                 <InputForm type="text" placehloder='Enter title here' name='title' onChange={handleInputChange}
-                           value={formData.title} id='title'/>
+                    value={formData.title} id='title' />
             </div>
 
             <div className='formGroup'>
-                <LabelForm labelText="כתובת אתר"/>
+                <LabelForm labelText="כתובת אתר" />
                 <InputForm
                     name='action'
                     value={formData.action}
                     onChange={handleInputChange}
                     type='url'
                     placehloder='Enter button url here'
-                    id='action'/>
+                    id='action' />
             </div>
 
             <div className='formGroup'>
-                <LabelForm labelText="סדר"/>
+                <LabelForm labelText="סדר" />
                 <InputForm
                     name='order'
                     value={formData.order}
                     onChange={handleInputChange}
                     type='number'
                     placehloder='Enter order here'
-                    id='order'/>
+                    id='order' />
             </div>
 
             <Grid display={'flex'} justifyContent={'center'} className='formGroup'>
@@ -171,21 +198,11 @@ const AddCarousalForm = ({
                     type="submit"
                     color="success"
                 >
-                    Add Data
+                    {editMode ? 'Update Data' : 'Add Data'}
                 </Button>
             </Grid>
         </form>
     );
 };
-
-function generateImageUrlOrPath(file: File): string | undefined {
-    try {
-        const imageUrl = URL.createObjectURL(file);
-        return imageUrl;
-    } catch (error) {
-        console.error('Failed to generate image URL', error);
-        return undefined;
-    }
-}
 
 export default AddCarousalForm;
