@@ -7,14 +7,12 @@ import { TrashIcon } from "../../icons/trash-icon";
 import { EyeIcon } from "../../icons/eye-icon";
 import { EditIcon } from "../../icons/edit-icon";
 import { DeleteItemModal } from "../../modals/delete-item-modal/delete-item-modal";
-import { FaRegEyeSlash } from "react-icons/fa";
 
 interface DraggableItemProps<T> {
   item: T;
   index: number;
   onUpdateIconClick: (item: T) => void;
   onPreviewCarousel: (id: string) => void;
-  onDeleteItem: (id: string) => void;
 }
 
 interface DraggableDefaultProps {
@@ -29,27 +27,11 @@ interface DraggableDefaultProps {
 export function DraggableItem<T extends DraggableDefaultProps>(
   props: DraggableItemProps<T>,
 ): ReactElement {
-  const { item, index, onUpdateIconClick, onPreviewCarousel, onDeleteItem } =
-    props;
+  const { item, index, onUpdateIconClick, onPreviewCarousel } = props;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const [isToggleEye, setToggleEye] = useState(false);
-
-  const handleToggleEye = () => {
-    setToggleEye((prevIsOn) => !prevIsOn);
-    console.log(isToggleEye)
-  };
 
   const deleteItemCallback = () => {
-    onDeleteItem(item.id);
-    // console.log(item.id);
-  };
-
-  const handleItemClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const isButtonClicked = (event.target as HTMLElement).closest("button");
-
-    if (!isButtonClicked) {
-      onPreviewCarousel(item.id);
-    }
+    console.log(item.id);
   };
 
   return (
@@ -60,7 +42,6 @@ export function DraggableItem<T extends DraggableDefaultProps>(
             ref={provided.innerRef}
             {...provided.draggableProps}
             className={styles.tr}
-            onClick={handleItemClick}
           >
             <span className={`${styles.td} w-5`}>{item.order}</span>
             <span className={`${styles.td} w-20`}>{item.title}</span>
@@ -85,9 +66,9 @@ export function DraggableItem<T extends DraggableDefaultProps>(
                 classes={styles.iconBtn}
                 aria-label="edit"
                 size="small"
-                onClick={handleToggleEye}
+                onClick={() => onPreviewCarousel(item.id)}
               >
-                {isToggleEye ? <FaRegEyeSlash /> : <EyeIcon />}
+                <EyeIcon />
               </IconButton>
               <IconButton
                 classes={styles.iconBtn}

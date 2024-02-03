@@ -4,28 +4,31 @@ import { Link as RouterLink } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./post-preview.module.scss";
-import { PostCard } from "../../interfaces/postCard";
 import ModalWrapper from "../../common/modal";
 
-interface PostAddedProps {
-  isShow: boolean;
-  postData: PostCard[];
-  selectedItemId: any;
+interface postPreviewModalProps {
+  id: string;
+  title: string;
+  action: string;
+  order: number;
   onClose: () => void;
+  description: string;
+  isPreViewOpen: boolean;
 }
 
-const PreviewPostlItem: React.FC<PostAddedProps> = ({
-  isShow,
-  postData,
-  selectedItemId,
+export const PostPreviewModal: React.FC<postPreviewModalProps> = ({
+  id,
+  title,
+  action,
+  order,
   onClose,
+  description,
+  isPreViewOpen,
 }) => {
-  const selectedItem = postData.find((item) => item.id === selectedItemId);
-
   return (
-    <ModalWrapper maxWidth="641px" open={isShow} onClose={onClose}>
-      <Grid container justifyContent="center">
-        {selectedItem && (
+    <ModalWrapper open={isPreViewOpen} onClose={onClose} maxWidth="437px">
+      {id && (
+        <Grid container justifyContent="center">
           <div style={{ width: "100%" }}>
             {/* Modal Header */}
             <Grid
@@ -49,41 +52,30 @@ const PreviewPostlItem: React.FC<PostAddedProps> = ({
             </Grid>
 
             {/* Main Preview Content */}
-            <div className={styles.previewContainer}>
-              <div className={styles.previewItems}>
-                <div
-                  className={styles.previewMain}
-                  style={{
 
-                    maxHeight: "360px",
-                  }}
-                >
-                  <div className={styles.previewContent}>
-                    <div className={styles.previewBody}>
-                      {/* Display item title */}
-                      <h5>{selectedItem.title}</h5>
+            <div className={styles.previewContent}>
+              <div className={styles.previewBody}>
+                {/* Display item title */}
+                <h5>{title}</h5>
 
-                      {/* Preview Button */}
-                      <div className={styles.previewBtn}>
-                        <Button
-                          className={styles.previewButton}
-                          component={RouterLink}
-                          to={selectedItem.action}
-                        >
-                          <WestIcon />
-                        </Button>
-                      </div>
-                    </div>
-                    <p>{selectedItem.description}</p>
-                  </div>
+                {/* Description */}
+                {description && <p>{description}</p>}
+
+                {/* Preview Button */}
+                <div className={styles.previewBtn}>
+                  <Button
+                    className={styles.previewButton}
+                    component={RouterLink}
+                    to={action}
+                  >
+                    <WestIcon />
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
-        )}
-      </Grid>
+        </Grid>
+      )}
     </ModalWrapper>
   );
 };
-
-export default PreviewPostlItem;

@@ -1,5 +1,5 @@
-.thead,
-.tbody {
+
+.thead, .tbody {
   display: table-row-group;
   vertical-align: middle;
   border-color: inherit;
@@ -12,10 +12,8 @@
 .tr {
   display: flex;
   border-bottom: 1px solid #E5E7EB;
-  cursor: pointer;
 
-  .td,
-  .th {
+  .td, .th {
     display: table-cell;
     padding: 16px 12px;
     vertical-align: middle;
@@ -45,3 +43,5 @@
     border: 0;
   }
 }
+
+

@@ -1,38 +1,38 @@
-import { PostCard } from "../../../interfaces";
+import { HeroCard } from "../../../interfaces";
 import { useUploadSomeDataMutation } from "../../../redux/slices/home";
 
 // Define the type for the custom hook's props (if any)
-interface UsePostProps {
+interface UseCarouselProps {
   // Define your props here
   isRandomOrderActive: boolean;
   setRandomOrderActive: (val: boolean) => void;
-  setPostData: (val: any) => void;
+  setCarousalData: (val: any) => void;
 }
 
 // Define the return type of the custom hook
-interface UsePostReturn {
-  handleEditData: (updatedData: PostCard) => void;
-  handleAddData: (newData: PostCard) => void;
+interface UseCarouselReturn {
+  handleEditData: (updatedData: HeroCard) => void;
+  handleAddData: (newData: HeroCard) => void;
   checkBoxHandler: () => void;
   handleOpenCarouselDeleteModal: (itemId: string) => void;
 }
 
 // Define the custom hook function
-export const usePost = (props: UsePostProps): UsePostReturn => {
-  const { setRandomOrderActive, setPostData, isRandomOrderActive } = props;
+export const useCarousel = (props: UseCarouselProps): UseCarouselReturn => {
+  const { setRandomOrderActive, setCarousalData, isRandomOrderActive } = props;
   const [uploadSomeData] = useUploadSomeDataMutation();
 
-  const handleEditData = (updatedData: PostCard) => {
-    setPostData((prevData: PostCard[]) =>
+  const handleEditData = (updatedData: HeroCard) => {
+    setCarousalData((prevData: HeroCard[]) =>
       prevData.map((item) =>
         item.id === updatedData?.id ? updatedData : item,
       ),
     );
   };
 
-  const handleAddData = (newData: PostCard) => {
+  const handleAddData = (newData: HeroCard) => {
     console.log({ newData });
-    setPostData((prevData: PostCard[]) => [...prevData, newData]);
+    setCarousalData((prevData: HeroCard[]) => [...prevData, newData]);
   };
 
   const checkBoxHandler = async () => {
